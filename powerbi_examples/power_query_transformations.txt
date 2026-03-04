@@ -1,0 +1,446 @@
+================================================================================
+POWER QUERY (M CODE) TRANSFORMATIONS
+================================================================================
+
+This file contains Power Query M code examples for data transformation
+in Power BI. These demonstrate ETL capabilities using Power Query.
+
+================================================================================
+1. IMPORT AND BASIC TRANSFORMATIONS
+================================================================================
+
+// Load CSV file
+let
+    Source = Csv.Document(
+        File.Contents("C:\Data\sales_data.csv"),
+        [Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]
+    ),
+    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+    ChangedType = Table.TransformColumnTypes(
+        PromotedHeaders,
+        {
+            {"transaction_id", type text},
+            {"transaction_date", type datetime},
+            {"customer_id", type text},
+            {"product_category", type text},
+            {"product_name", type text},
+            {"quantity", Int64.Type},
+            {"unit_price", type number},
+            {"revenue", type number},
+            {"store_location", type text}
+        }
+    )
+in
+    ChangedType
+
+================================================================================
+2. DATE TABLE CREATION
+================================================================================
+
+// Create comprehensive date table
+let
+    StartDate = #date(2020, 1, 1),
+    EndDate = #date(2025, 12, 31),
+    NumberOfDays = Duration.Days(EndDate - StartDate) + 1,
+    DateList = List.Dates(StartDate, NumberOfDays, #duration(1,0,0,0)),
+    TableFromList = Table.FromList(DateList, Splitter.SplitByNothing()),
+    ChangedType = Table.TransformColumnTypes(TableFromList, {{"Column1", type date}}),
+    RenamedColumn = Table.RenameColumns(ChangedType, {{"Column1", "Date"}}),
+
+    // Add date attributes
+    AddYear = Table.AddColumn(RenamedColumn, "Year", each Date.Year([Date]), Int64.Type),
+    AddMonth = Table.AddColumn(AddYear, "Month", each Date.Month([Date]), Int64.Type),
+    AddMonthName = Table.AddColumn(AddMonth, "Month Name", each Date.MonthName([Date]), type text),
+    AddMonthShort = Table.AddColumn(AddMonthName, "Month Short", each Date.ToText([Date], "MMM"), type text),
+    AddQuarter = Table.AddColumn(AddMonthShort, "Quarter", each "Q" & Text.From(Date.QuarterOfYear([Date])), type text),
+    AddWeek = Table.AddColumn(AddQuarter, "Week of Year", each Date.WeekOfYear([Date]), Int64.Type),
+    AddDay = Table.AddColumn(AddWeek, "Day", each Date.Day([Date]), Int64.Type),
+    AddDayOfWeek = Table.AddColumn(AddDay, "Day of Week", each Date.DayOfWeek([Date]), Int64.Type),
+    AddDayName = Table.AddColumn(AddDayOfWeek, "Day Name", each Date.DayOfWeekName([Date]), type text),
+    AddDayShort = Table.AddColumn(AddDayName, "Day Short", each Date.ToText([Date], "ddd"), type text),
+
+    // Add fiscal periods (assuming fiscal year starts in October)
+    AddFiscalYear = Table.AddColumn(AddDayShort, "Fiscal Year",
+        each if [Month] >= 10 then [Year] + 1 else [Year], Int64.Type),
+    AddFiscalQuarter = Table.AddColumn(AddFiscalYear, "Fiscal Quarter",
+        each "FQ" & Text.From(Number.RoundUp((Date.Month(Date.AddMonths([Date], -9))/3))), type text),
+
+    // Add flags
+    AddIsWeekend = Table.AddColumn(AddFiscalQuarter, "Is Weekend",
+        each if [Day of Week] = 6 or [Day of Week] = 0 then true else false, type logical),
+    AddIsWorkday = Table.AddColumn(AddIsWeekend, "Is Workday",
+        each if [Is Weekend] = false then true else false, type logical),
+
+    // Add year-month for sorting
+    AddYearMonth = Table.AddColumn(AddIsWorkday, "Year-Month",
+        each [Year] * 100 + [Month], Int64.Type),
+
+    // Add relative period indicators
+    AddIsToday = Table.AddColumn(AddYearMonth, "Is Today",
+        each if [Date] = Date.From(DateTime.LocalNow()) then true else false, type logical)
+in
+    AddIsToday
+
+================================================================================
+3. DATA CLEANING TRANSFORMATIONS
+================================================================================
+
+// Clean and standardize customer data
+let
+    Source = Csv.Document(File.Contents("C:\Data\customer_data.csv")),
+    PromotedHeaders = Table.PromoteHeaders(Source),
+
+    // Remove duplicates based on customer_id
+    RemovedDuplicates = Table.Distinct(PromotedHeaders, {"customer_id"}),
+
+    // Trim whitespace from text columns
+    TrimmedText = Table.TransformColumns(
+        RemovedDuplicates,
+        {
+            {"customer_id", Text.Trim, type text},
+            {"city", Text.Trim, type text},
+            {"customer_segment", Text.Trim, type text}
+        }
+    ),
+
+    // Proper case for city names
+    ProperCaseCity = Table.TransformColumns(
+        TrimmedText,
+        {{"city", Text.Proper, type text}}
+    ),
+
+    // Replace null values in customer_segment with "Unknown"
+    ReplacedNulls = Table.ReplaceValue(
+        ProperCaseCity,
+        null,
+        "Unknown",
+        Replacer.ReplaceValue,
+        {"customer_segment"}
+    ),
+
+    // Filter out invalid ages
+    FilteredAge = Table.SelectRows(
+        ReplacedNulls,
+        each [age] >= 18 and [age] <= 100
+    ),
+
+    // Add age group
+    AddAgeGroup = Table.AddColumn(
+        FilteredAge,
+        "Age Group",
+        each if [age] < 25 then "18-24"
+            else if [age] < 35 then "25-34"
+            else if [age] < 45 then "35-44"
+            else if [age] < 55 then "45-54"
+            else "55+",
+        type text
+    )
+in
+    AddAgeGroup
+
+================================================================================
+4. ADVANCED TRANSFORMATIONS
+================================================================================
+
+// Calculate customer metrics from sales data
+let
+    Source = Sales, // Reference to Sales table
+
+    // Group by customer to calculate metrics
+    GroupedCustomers = Table.Group(
+        Source,
+        {"customer_id"},
+        {
+            {"Total Transactions", each Table.RowCount(_), Int64.Type},
+            {"Total Revenue", each List.Sum([revenue]), type number},
+            {"Avg Transaction Value", each List.Average([revenue]), type number},
+            {"First Purchase Date", each List.Min([transaction_date]), type datetime},
+            {"Last Purchase Date", each List.Max([transaction_date]), type datetime},
+            {"Total Units", each List.Sum([quantity]), Int64.Type},
+            {"Unique Products", each List.Count(List.Distinct([product_name])), Int64.Type}
+        }
+    ),
+
+    // Calculate recency (days since last purchase)
+    AddRecency = Table.AddColumn(
+        GroupedCustomers,
+        "Recency (Days)",
+        each Duration.Days(DateTime.LocalNow() - [Last Purchase Date]),
+        Int64.Type
+    ),
+
+    // Calculate customer lifetime (days between first and last purchase)
+    AddLifetime = Table.AddColumn(
+        AddRecency,
+        "Customer Lifetime (Days)",
+        each Duration.Days([Last Purchase Date] - [First Purchase Date]),
+        Int64.Type
+    ),
+
+    // Calculate average days between purchases
+    AddAvgDaysBetween = Table.AddColumn(
+        AddLifetime,
+        "Avg Days Between Purchases",
+        each if [Total Transactions] > 1
+            then [Customer Lifetime (Days)] / ([Total Transactions] - 1)
+            else null,
+        type number
+    ),
+
+    // RFM Scoring
+    AddRScore = Table.AddColumn(
+        AddAvgDaysBetween,
+        "R_Score",
+        each if [Recency (Days)] <= 30 then 5
+            else if [Recency (Days)] <= 60 then 4
+            else if [Recency (Days)] <= 90 then 3
+            else if [Recency (Days)] <= 180 then 2
+            else 1,
+        Int64.Type
+    ),
+
+    AddFScore = Table.AddColumn(
+        AddRScore,
+        "F_Score",
+        each if [Total Transactions] >= 20 then 5
+            else if [Total Transactions] >= 10 then 4
+            else if [Total Transactions] >= 5 then 3
+            else if [Total Transactions] >= 2 then 2
+            else 1,
+        Int64.Type
+    ),
+
+    AddMScore = Table.AddColumn(
+        AddFScore,
+        "M_Score",
+        each if [Total Revenue] >= 50000 then 5
+            else if [Total Revenue] >= 20000 then 4
+            else if [Total Revenue] >= 5000 then 3
+            else if [Total Revenue] >= 1000 then 2
+            else 1,
+        Int64.Type
+    ),
+
+    // Calculate total RFM score
+    AddRFMScore = Table.AddColumn(
+        AddMScore,
+        "RFM_Score",
+        each [R_Score] + [F_Score] + [M_Score],
+        Int64.Type
+    ),
+
+    // Classify customer segment based on RFM
+    AddSegment = Table.AddColumn(
+        AddRFMScore,
+        "Customer Segment",
+        each if [RFM_Score] >= 13 then "Champions"
+            else if [RFM_Score] >= 11 then "Loyal Customers"
+            else if [R_Score] >= 4 and [F_Score] <= 2 then "Recent Customers"
+            else if [F_Score] >= 4 then "Frequent Buyers"
+            else if [M_Score] >= 4 then "High Spenders"
+            else if [R_Score] <= 2 and [F_Score] <= 2 then "At Risk"
+            else if [R_Score] <= 2 then "Lost Customers"
+            else "Potential Loyalists",
+        type text
+    )
+in
+    AddSegment
+
+================================================================================
+5. CONDITIONAL COLUMN CREATION
+================================================================================
+
+// Add business logic based on multiple conditions
+let
+    Source = Sales,
+
+    // Categorize transaction size
+    AddTransactionCategory = Table.AddColumn(
+        Source,
+        "Transaction Category",
+        each if [revenue] >= 20000 then "Very Large"
+            else if [revenue] >= 5000 then "Large"
+            else if [revenue] >= 500 then "Medium"
+            else "Small",
+        type text
+    ),
+
+    // Identify high-value products
+    AddProductTier = Table.AddColumn(
+        AddTransactionCategory,
+        "Product Tier",
+        each if [product_category] = "Smartphone" and [unit_price] >= 25000 then "Premium"
+            else if [product_category] = "Smartphone" and [unit_price] >= 15000 then "Mid-Range"
+            else if [product_category] = "Smartphone" then "Budget"
+            else "Accessory/Other",
+        type text
+    ),
+
+    // Add time-based flags
+    AddTimeFlags = Table.AddColumn(
+        AddProductTier,
+        "Time Period",
+        each if Date.IsInCurrentMonth([transaction_date]) then "Current Month"
+            else if Date.IsInPreviousMonth([transaction_date]) then "Last Month"
+            else if Date.IsInCurrentQuarter([transaction_date]) then "Current Quarter"
+            else if Date.IsInCurrentYear([transaction_date]) then "Current Year"
+            else "Prior Period",
+        type text
+    )
+in
+    AddTimeFlags
+
+================================================================================
+6. MERGING TABLES
+================================================================================
+
+// Merge sales with customer data
+let
+    SalesData = Sales,
+    CustomerData = Customers,
+
+    // Left join sales with customers
+    MergedTables = Table.NestedJoin(
+        SalesData,
+        {"customer_id"},
+        CustomerData,
+        {"customer_id"},
+        "Customer Info",
+        JoinKind.LeftOuter
+    ),
+
+    // Expand customer columns
+    ExpandedCustomer = Table.ExpandTableColumn(
+        MergedTables,
+        "Customer Info",
+        {"customer_segment", "city", "age", "gender"},
+        {"Customer Segment", "City", "Age", "Gender"}
+    )
+in
+    ExpandedCustomer
+
+================================================================================
+7. UNPIVOTING DATA
+================================================================================
+
+// Unpivot monthly sales data
+let
+    Source = Excel.CurrentWorkbook(){[Name="MonthlySales"]}[Content],
+    ChangedType = Table.TransformColumnTypes(Source,{{"Product", type text}}),
+
+    // Unpivot all month columns
+    UnpivotedColumns = Table.UnpivotOtherColumns(
+        ChangedType,
+        {"Product"},
+        "Month",
+        "Sales"
+    ),
+
+    // Parse month and year from column names
+    AddMonthYear = Table.AddColumn(
+        UnpivotedColumns,
+        "Date",
+        each Date.FromText("1-" & [Month]),
+        type date
+    )
+in
+    AddMonthYear
+
+================================================================================
+8. PARAMETER-DRIVEN QUERIES
+================================================================================
+
+// Create dynamic query based on parameter
+let
+    // Assume DateParameter is defined as a parameter
+    FilterDate = DateParameter,
+
+    Source = Sales,
+
+    // Filter based on parameter
+    FilteredData = Table.SelectRows(
+        Source,
+        each [transaction_date] >= FilterDate
+    ),
+
+    // Additional transformations
+    TransformedData = Table.TransformColumnTypes(
+        FilteredData,
+        {{"revenue", type number}}
+    )
+in
+    TransformedData
+
+================================================================================
+9. ERROR HANDLING
+================================================================================
+
+// Robust data import with error handling
+let
+    Source = try Csv.Document(File.Contents("C:\Data\sales_data.csv"))
+             otherwise #table({"Error"}, {{"File not found"}}),
+
+    // Check if source is error
+    Result = if Source[HasError]? = true
+             then Source
+             else
+                let
+                    PromotedHeaders = Table.PromoteHeaders(Source),
+                    ChangedType = Table.TransformColumnTypes(
+                        PromotedHeaders,
+                        {{"revenue", type number}}
+                    ),
+                    // Replace errors in revenue column with 0
+                    ReplacedErrors = Table.ReplaceErrorValues(
+                        ChangedType,
+                        {{"revenue", 0}}
+                    )
+                in
+                    ReplacedErrors
+in
+    Result
+
+================================================================================
+10. CUSTOM FUNCTIONS
+================================================================================
+
+// Create reusable custom function
+let
+    CalculateGrowth = (currentValue as number, previousValue as number) as number =>
+        let
+            Growth = if previousValue = 0 or previousValue = null
+                     then null
+                     else (currentValue - previousValue) / previousValue
+        in
+            Growth
+in
+    CalculateGrowth
+
+// Function to clean text
+let
+    CleanText = (inputText as text) as text =>
+        let
+            Trimmed = Text.Trim(inputText),
+            Proper = Text.Proper(Trimmed),
+            Cleaned = Text.Remove(Proper, {"#", "@", "!"})
+        in
+            Cleaned
+in
+    CleanText
+
+================================================================================
+NOTES ON POWER QUERY BEST PRACTICES
+================================================================================
+
+1. Always promote headers when importing data
+2. Set proper data types as early as possible
+3. Use descriptive step names for better documentation
+4. Minimize use of custom columns when native transformations exist
+5. Use Table.Buffer() for tables that are referenced multiple times
+6. Avoid using Table.AddColumn in loops - use List.Accumulate instead
+7. Use Query Folding when working with databases
+8. Create separate queries for reusable logic
+9. Use parameters for dynamic and maintainable queries
+10. Document complex M code with comments
+
+================================================================================

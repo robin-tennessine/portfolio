@@ -1,0 +1,408 @@
+================================================================================
+POWER BI DAX MEASURES - RETAIL ANALYTICS
+================================================================================
+
+This file contains DAX measures for retail sales analytics in Power BI.
+These measures demonstrate advanced DAX skills including time intelligence,
+filtering, statistical calculations, and performance optimization.
+
+================================================================================
+1. SALES METRICS
+================================================================================
+
+-- Total Revenue
+Total Revenue = SUM(Sales[revenue])
+
+-- Total Transactions
+Total Transactions = DISTINCTCOUNT(Sales[transaction_id])
+
+-- Total Units Sold
+Total Units Sold = SUM(Sales[quantity])
+
+-- Average Transaction Value
+Avg Transaction Value = DIVIDE([Total Revenue], [Total Transactions], 0)
+
+-- Average Unit Price
+Avg Unit Price = AVERAGE(Sales[unit_price])
+
+================================================================================
+2. TIME INTELLIGENCE MEASURES
+================================================================================
+
+-- Revenue Month-to-Date
+Revenue MTD = TOTALMTD([Total Revenue], 'Calendar'[Date])
+
+-- Revenue Year-to-Date
+Revenue YTD = TOTALYTD([Total Revenue], 'Calendar'[Date])
+
+-- Revenue Quarter-to-Date
+Revenue QTD = TOTALQTD([Total Revenue], 'Calendar'[Date])
+
+-- Previous Month Revenue
+Revenue PM = CALCULATE([Total Revenue], DATEADD('Calendar'[Date], -1, MONTH))
+
+-- Previous Year Revenue
+Revenue PY = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR('Calendar'[Date]))
+
+-- Month-over-Month Growth
+MoM Growth =
+DIVIDE(
+    [Total Revenue] - [Revenue PM],
+    [Revenue PM],
+    0
+)
+
+-- Month-over-Month Growth %
+MoM Growth % = [MoM Growth] * 100
+
+-- Year-over-Year Growth
+YoY Growth =
+DIVIDE(
+    [Total Revenue] - [Revenue PY],
+    [Revenue PY],
+    0
+)
+
+-- Year-over-Year Growth %
+YoY Growth % = [YoY Growth] * 100
+
+-- Revenue Last 30 Days
+Revenue L30D =
+CALCULATE(
+    [Total Revenue],
+    DATESINPERIOD('Calendar'[Date], LASTDATE('Calendar'[Date]), -30, DAY)
+)
+
+-- Revenue Last 90 Days
+Revenue L90D =
+CALCULATE(
+    [Total Revenue],
+    DATESINPERIOD('Calendar'[Date], LASTDATE('Calendar'[Date]), -90, DAY)
+)
+
+-- Moving Average (3 months)
+Revenue MA 3M =
+AVERAGEX(
+    DATESINPERIOD('Calendar'[Date], LASTDATE('Calendar'[Date]), -3, MONTH),
+    [Total Revenue]
+)
+
+================================================================================
+3. CUSTOMER METRICS
+================================================================================
+
+-- Unique Customers
+Unique Customers = DISTINCTCOUNT(Sales[customer_id])
+
+-- New Customers
+New Customers =
+CALCULATE(
+    DISTINCTCOUNT(Sales[customer_id]),
+    FILTER(
+        ALL(Sales),
+        CALCULATE(MIN(Sales[transaction_date])) =
+        CALCULATE(MIN(Sales[transaction_date]), ALL('Calendar'))
+    )
+)
+
+-- Returning Customers
+Returning Customers = [Unique Customers] - [New Customers]
+
+-- Average Revenue per Customer
+Revenue per Customer = DIVIDE([Total Revenue], [Unique Customers], 0)
+
+-- Customer Retention Rate
+Customer Retention Rate =
+VAR CustomersThisMonth = [Unique Customers]
+VAR CustomersLastMonth =
+    CALCULATE(
+        [Unique Customers],
+        DATEADD('Calendar'[Date], -1, MONTH)
+    )
+VAR RetainedCustomers =
+    CALCULATE(
+        DISTINCTCOUNT(Sales[customer_id]),
+        FILTER(
+            ALL(Sales),
+            Sales[customer_id] IN VALUES(Sales[customer_id]) &&
+            Sales[transaction_date] >= EOMONTH(TODAY(), -2) + 1 &&
+            Sales[transaction_date] <= EOMONTH(TODAY(), -1)
+        )
+    )
+RETURN
+    DIVIDE(RetainedCustomers, CustomersLastMonth, 0)
+
+-- Customer Lifetime Value (Simple)
+Customer LTV =
+AVERAGEX(
+    VALUES(Sales[customer_id]),
+    CALCULATE([Total Revenue])
+)
+
+================================================================================
+4. PRODUCT PERFORMANCE MEASURES
+================================================================================
+
+-- Product Count
+Product Count = DISTINCTCOUNT(Sales[product_name])
+
+-- Top Product by Revenue
+Top Product =
+FIRSTNONBLANK(
+    TOPN(1, VALUES(Sales[product_name]), [Total Revenue], DESC),
+    1
+)
+
+-- Product Revenue Rank
+Product Revenue Rank =
+RANKX(
+    ALL(Sales[product_name]),
+    [Total Revenue],
+    ,
+    DESC,
+    DENSE
+)
+
+-- Product Market Share
+Product Market Share % =
+DIVIDE(
+    [Total Revenue],
+    CALCULATE([Total Revenue], ALL(Sales[product_name])),
+    0
+) * 100
+
+-- ABC Classification
+ABC Classification =
+VAR CurrentProductRevenue = [Total Revenue]
+VAR TotalRevenue = CALCULATE([Total Revenue], ALL(Sales[product_name]))
+VAR RevenueShare = DIVIDE(CurrentProductRevenue, TotalRevenue, 0)
+RETURN
+    SWITCH(
+        TRUE(),
+        RevenueShare >= 0.20, "A - High Value",
+        RevenueShare >= 0.05, "B - Medium Value",
+        "C - Low Value"
+    )
+
+-- Units Sold vs Target
+Units Sold vs Target =
+VAR Actual = [Total Units Sold]
+VAR Target = 1000 // Replace with actual target table
+RETURN
+    Actual - Target
+
+-- Sales Velocity (units per day)
+Sales Velocity =
+VAR DaysInPeriod = DISTINCTCOUNT('Calendar'[Date])
+RETURN
+    DIVIDE([Total Units Sold], DaysInPeriod, 0)
+
+================================================================================
+5. SEGMENT ANALYSIS
+================================================================================
+
+-- Premium Customers Revenue
+Premium Revenue =
+CALCULATE(
+    [Total Revenue],
+    Customer[customer_segment] = "Premium"
+)
+
+-- Regular Customers Revenue
+Regular Revenue =
+CALCULATE(
+    [Total Revenue],
+    Customer[customer_segment] = "Regular"
+)
+
+-- Premium Segment Share
+Premium Segment Share % =
+DIVIDE([Premium Revenue], [Total Revenue], 0) * 100
+
+-- Revenue by Segment
+Revenue by Segment =
+SWITCH(
+    SELECTEDVALUE(Customer[customer_segment]),
+    "Premium", [Premium Revenue],
+    "Regular", [Regular Revenue],
+    [Total Revenue]
+)
+
+-- Avg Order Value by Segment
+AOV by Segment =
+DIVIDE(
+    [Total Revenue],
+    [Total Transactions],
+    0
+)
+
+================================================================================
+6. STORE PERFORMANCE
+================================================================================
+
+-- Store Count
+Store Count = DISTINCTCOUNT(Sales[store_location])
+
+-- Revenue per Store
+Revenue per Store = DIVIDE([Total Revenue], [Store Count], 0)
+
+-- Store Performance vs Average
+Store vs Avg =
+VAR StoreRevenue = [Total Revenue]
+VAR AvgStoreRevenue =
+    CALCULATE(
+        AVERAGEX(VALUES(Sales[store_location]), [Total Revenue]),
+        ALL(Sales[store_location])
+    )
+RETURN
+    StoreRevenue - AvgStoreRevenue
+
+-- Best Performing Store
+Best Store =
+FIRSTNONBLANK(
+    TOPN(1, VALUES(Sales[store_location]), [Total Revenue], DESC),
+    1
+)
+
+================================================================================
+7. DYNAMIC MEASURES
+================================================================================
+
+-- Dynamic Measure Selector
+Selected Metric =
+SWITCH(
+    SELECTEDVALUE('Metric Selector'[Metric]),
+    "Revenue", [Total Revenue],
+    "Transactions", [Total Transactions],
+    "Customers", [Unique Customers],
+    "AOV", [Avg Transaction Value],
+    [Total Revenue]
+)
+
+-- Variance to Target
+Variance to Target =
+VAR Actual = [Total Revenue]
+VAR Target = [Revenue Target] // Define Revenue Target measure
+RETURN
+    DIVIDE(Actual - Target, Target, 0)
+
+-- Variance to Target %
+Variance to Target % = [Variance to Target] * 100
+
+-- Traffic Light Indicator
+Performance Indicator =
+VAR Variance = [Variance to Target %]
+RETURN
+    SWITCH(
+        TRUE(),
+        Variance >= 10, "🟢 Exceeding",
+        Variance >= -5, "🟡 On Track",
+        "🔴 Below Target"
+    )
+
+================================================================================
+8. STATISTICAL MEASURES
+================================================================================
+
+-- Revenue Standard Deviation
+Revenue Std Dev = STDEV.P(Sales[revenue])
+
+-- Revenue Median
+Revenue Median = MEDIAN(Sales[revenue])
+
+-- Revenue Percentile 90
+Revenue P90 = PERCENTILE.INC(Sales[revenue], 0.90)
+
+-- Coefficient of Variation
+Revenue CV = DIVIDE([Revenue Std Dev], AVERAGE(Sales[revenue]), 0)
+
+================================================================================
+9. CONDITIONAL FORMATTING MEASURES
+================================================================================
+
+-- Revenue Color
+Revenue Color =
+VAR MoM = [MoM Growth %]
+RETURN
+    SWITCH(
+        TRUE(),
+        MoM > 10, "#00C851",      // Green
+        MoM > 0, "#FFD700",       // Yellow
+        "#FF4444"                  // Red
+    )
+
+-- KPI Status
+KPI Status =
+VAR Performance = [Variance to Target %]
+RETURN
+    SWITCH(
+        TRUE(),
+        Performance >= 5, 1,      // Above target
+        Performance >= -5, 0,     // On target
+        -1                        // Below target
+    )
+
+================================================================================
+10. ADVANCED CALCULATIONS
+================================================================================
+
+-- Pareto Analysis (80/20 Rule)
+Pareto Cumulative % =
+VAR CurrentProduct = SELECTEDVALUE(Sales[product_name])
+VAR ProductsWithRevenue =
+    ADDCOLUMNS(
+        VALUES(Sales[product_name]),
+        "ProductRevenue", [Total Revenue]
+    )
+VAR RankedProducts =
+    FILTER(
+        ProductsWithRevenue,
+        [ProductRevenue] >=
+        CALCULATE([Total Revenue], Sales[product_name] = CurrentProduct)
+    )
+VAR CumulativeRevenue = SUMX(RankedProducts, [ProductRevenue])
+VAR TotalRevenue = [Total Revenue]
+RETURN
+    DIVIDE(CumulativeRevenue, TotalRevenue, 0) * 100
+
+-- Customer Churn Rate
+Churn Rate =
+VAR CustomersLastMonth =
+    CALCULATE(
+        DISTINCTCOUNT(Sales[customer_id]),
+        DATEADD('Calendar'[Date], -1, MONTH)
+    )
+VAR CustomersThisMonth = [Unique Customers]
+VAR ChurnedCustomers = CustomersLastMonth - CustomersThisMonth
+RETURN
+    DIVIDE(ChurnedCustomers, CustomersLastMonth, 0)
+
+-- Repeat Purchase Rate
+Repeat Purchase Rate =
+VAR CustomersWithMultiplePurchases =
+    CALCULATE(
+        DISTINCTCOUNT(Sales[customer_id]),
+        FILTER(
+            VALUES(Sales[customer_id]),
+            CALCULATE(DISTINCTCOUNT(Sales[transaction_id])) > 1
+        )
+    )
+RETURN
+    DIVIDE(CustomersWithMultiplePurchases, [Unique Customers], 0)
+
+================================================================================
+NOTES ON DAX BEST PRACTICES
+================================================================================
+
+1. Always use DIVIDE() instead of "/" to handle division by zero
+2. Use Variables (VAR) for better performance and readability
+3. Filter context is important - use CALCULATE() to modify it
+4. Use DISTINCTCOUNT for counting unique values
+5. Time intelligence functions require a proper date table
+6. Use ALL() carefully as it can impact performance
+7. Test measures with different filter contexts
+8. Document complex measures with comments
+9. Use measure groups to organize related measures
+10. Optimize iterators (SUMX, AVERAGEX) by filtering first
+
+================================================================================
