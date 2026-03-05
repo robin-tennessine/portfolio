@@ -19,9 +19,21 @@ These visualizations show how customers transition between segments year-over-ye
 - `sankey_2024-2025.html` - Year-to-year flow (2024→2025)
 - `sankey_multiyear.html` - ⭐ **All years combined (recommended)**
 
-### 📊 Preview: Customer Segment Flow (2024→2025)
+### 📊 Preview: Customer Segment Distribution (2024→2025)
 
-![Customer Segment Flow 2024-2025](sankey_2024-2025.png)
+![Customer Segment Comparison](segment_comparison_2024_2025.png)
+
+### 📈 Segment Transition Matrix (2024→2025)
+
+This matrix shows how many customers moved from each 2024 segment to each 2025 segment:
+
+![Segment Transition Matrix](segment_transition_matrix_2024_2025.png)
+
+**How to Read:**
+- **Rows**: Customer segment in 2024
+- **Columns**: Where they moved to in 2025
+- **Numbers**: Count of customers making that transition
+- **Diagonal (darker)**: Customers who stayed in the same segment (retention)
 
 **Segment Colors:**
 - 🔵 **Blue (Active)**: Purchased within 90 days
