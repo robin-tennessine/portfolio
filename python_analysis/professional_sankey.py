@@ -219,6 +219,26 @@ class ProfessionalSankeyBuilder:
         # Create link labels with customdata for hover
         link_labels = transitions_df['Label'].tolist() if show_percentages else None
 
+        # Create link colors based on source segment
+        link_colors = []
+        for _, row in transitions_df.iterrows():
+            source_node = row['Source']
+            # Extract segment name
+            if 'New Members' in source_node:
+                link_colors.append('rgba(40, 167, 69, 0.2)')  # Green
+            elif 'Active' in source_node:
+                link_colors.append('rgba(46, 134, 171, 0.25)')  # Blue
+            elif 'At Risk' in source_node:
+                link_colors.append('rgba(241, 143, 1, 0.25)')  # Orange
+            elif 'Inactive' in source_node:
+                link_colors.append('rgba(162, 59, 114, 0.25)')  # Purple
+            elif 'Dormant' in source_node:
+                link_colors.append('rgba(199, 62, 29, 0.25)')  # Red
+            elif 'Never Purchased' in source_node:
+                link_colors.append('rgba(108, 117, 125, 0.2)')  # Gray
+            else:
+                link_colors.append('rgba(200, 200, 200, 0.2)')  # Default
+
         # Create Sankey diagram
         fig = go.Figure(data=[go.Sankey(
             arrangement='snap',
@@ -236,7 +256,7 @@ class ProfessionalSankeyBuilder:
                 target=transitions_df['Target_idx'],
                 value=transitions_df['Count'],
                 label=link_labels,
-                color='rgba(200, 200, 200, 0.3)',
+                color=link_colors,  # Use colored flows
                 customdata=transitions_df[['Source', 'Target', 'Count', 'Percentage']].values,
                 hovertemplate='%{customdata[0]} → %{customdata[1]}<br>' +
                              '%{customdata[2]:,} members (%{customdata[3]:.1f}%)<extra></extra>'
