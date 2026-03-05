@@ -43,3 +43,8 @@ wheels/
 
 # Website configuration (contains credentials)
 website/js/config.js
+
+# Flask API configuration (contains SMTP passwords, database credentials)
+flask_api_export/config.py
+flask_api_export/exports/
+flask_api_export/*.log
