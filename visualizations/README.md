@@ -1,39 +1,41 @@
 # Customer Segment Flow Visualizations
 
-## Interactive Sankey Diagrams
+## Professional Sankey Diagram with Start/End Year Snapshots
 
-These visualizations show how customers transition between segments year-over-year.
+These visualizations show how customers transition between segments with detailed start-of-year and end-of-year snapshots.
 
 ### 🎯 How to View
 
-**For Interactive Experience:**
-1. Download any `.html` file
-2. Open it in your browser
-3. Hover over flows to see customer counts
-4. Zoom and pan to explore
+**Interactive Sankey Diagram:**
+- `sankey_professional_2024_2025.html` - ⭐ **Main professional Sankey**
+  - Shows 4 time points: 2024 Start → 2024 End → 2025 Start → 2025 End
+  - Includes percentages on all flows
+  - Tracks new member acquisition separately
+  - Hover for detailed transition info
 
-**Available Sankey Diagrams:**
-- `sankey_2021-2022.html` - Year-to-year flow (2021→2022)
-- `sankey_2022-2023.html` - Year-to-year flow (2022→2023)
-- `sankey_2023-2024.html` - Year-to-year flow (2023→2024)
-- `sankey_2024-2025.html` - Year-to-year flow (2024→2025)
-- `sankey_multiyear.html` - ⭐ **All years combined (recommended)**
+**Download the HTML file and open in your browser for full interactivity**
 
-### 📊 Preview: Customer Segment Distribution (2024→2025)
+### 📊 Preview: Professional Sankey Diagram
 
+![Professional Sankey 2024-2025](sankey_professional_2024_2025.png)
+
+**This Sankey shows:**
+- ✅ Four time points (2024 Start, 2024 End, 2025 Start, 2025 End)
+- ✅ Percentage labels on every flow (e.g., "976 (88.0%)")
+- ✅ New members tracked separately with green flows
+- ✅ Light-colored flows matching source segment
+- ✅ Interactive hover tooltips (in HTML version)
+
+### 📈 Additional Analysis Visualizations
+
+**Segment Comparison (Year-over-Year):**
 ![Customer Segment Comparison](segment_comparison_2024_2025.png)
 
-### 📈 Segment Transition Matrix (2024→2025)
-
-This matrix shows how many customers moved from each 2024 segment to each 2025 segment:
-
+**Transition Matrix Heatmap:**
 ![Segment Transition Matrix](segment_transition_matrix_2024_2025.png)
 
-**How to Read:**
-- **Rows**: Customer segment in 2024
-- **Columns**: Where they moved to in 2025
-- **Numbers**: Count of customers making that transition
-- **Diagonal (darker)**: Customers who stayed in the same segment (retention)
+**Percentage Breakdown Summary:**
+![Segment Transition Percentages](segment_transition_percentages.png)
 
 **Segment Colors:**
 - 🔵 **Blue (Active)**: Purchased within 90 days
