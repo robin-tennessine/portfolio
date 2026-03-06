@@ -172,6 +172,86 @@
     }
 
     // ============================================
+    // EXPORT PORTFOLIO FUNCTION
+    // ============================================
+    window.exportPortfolio = function() {
+        // Create portfolio summary text
+        const portfolioData = `
+ROBIN PHONPAKDEE - DATA ANALYST PORTFOLIO
+========================================
+
+CONTACT INFORMATION
+-------------------
+Email: robint.phonpakdee@gmail.com
+LinkedIn: https://www.linkedin.com/in/robin-phonpakdee-4a4782251
+GitHub: https://github.com/robin-tennessine
+
+PROFESSIONAL SUMMARY
+--------------------
+Junior Data Analyst with one year of experience in retail analytics and business intelligence.
+Currently working at Cube Analytics Consulting for Jaymart Holding, specializing in SQL, Python,
+and Power BI for data-driven decision making.
+
+TECHNICAL SKILLS
+----------------
+• SQL (PostgreSQL, MySQL)
+• Python (pandas, scikit-learn, matplotlib)
+• Power BI (DAX, Power Query)
+• Flask API Development
+• ETL & Data Pipelines
+• RapidMiner
+• Excel & Data Visualization
+
+ANALYSIS EXPERTISE
+------------------
+• Customer Segmentation
+• Trend Analysis
+• KPI Reporting
+• Statistical Analysis
+• Machine Learning (K-means)
+• Business Intelligence
+
+EXPERIENCE
+----------
+Junior Data Analyst (2024 — Present)
+Cube Analytics Consulting → Jaymart Holding
+Bangkok, Thailand
+
+• Design and develop interactive dashboards and reports using Power BI
+• Perform customer segmentation analysis to identify high-value segments
+• Build ETL pipelines using RapidMiner to automate data processing workflows
+• Conduct ad-hoc analysis to support business initiatives
+• Collaborate with cross-functional teams to translate business requirements
+
+FEATURED PROJECTS
+-----------------
+1. Advanced SQL Analytics - PostgreSQL window functions, CTEs, and time-series analysis
+2. Python Data Analytics - Machine learning, customer segmentation, and RFM analysis
+3. ETL Data Pipeline - Production-ready pipeline with data validation and quality checks
+4. Power BI Solutions - 60+ DAX measures and advanced data modeling
+5. Flask API Export Service - PDPA-compliant API with data masking and security
+6. Customer Segment Flow - Sankey visualization for customer journey analysis
+
+========================================
+Generated: ${new Date().toLocaleDateString()}
+Visit: https://github.com/robin-tennessine/portfolio
+`;
+
+        // Create and download the file
+        const blob = new Blob([portfolioData], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Robin_Phonpakdee_Portfolio_Summary.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        console.log('Portfolio exported successfully!');
+    };
+
+    // ============================================
     // INITIALIZE ALL
     // ============================================
     function init() {
