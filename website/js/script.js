@@ -252,6 +252,58 @@ Visit: https://github.com/robin-tennessine/portfolio
     };
 
     // ============================================
+    // GOOGLE ANALYTICS EVENT TRACKING
+    // ============================================
+    function initEventTracking() {
+        // Track resume downloads
+        const resumeButtons = document.querySelectorAll('a[download], a[href*="Resume.pdf"]');
+        resumeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'resume_download', {
+                        'event_category': 'engagement',
+                        'event_label': 'Resume PDF Download',
+                        'value': 1
+                    });
+                    console.log('📊 Tracked: Resume download');
+                }
+            });
+        });
+
+        // Track project link clicks
+        const projectLinks = document.querySelectorAll('.project-link');
+        projectLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const projectTitle = this.closest('.project-card')?.querySelector('.project-title')?.textContent || 'Unknown';
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'project_view', {
+                        'event_category': 'engagement',
+                        'event_label': projectTitle,
+                        'value': 1
+                    });
+                    console.log('📊 Tracked: Project view -', projectTitle);
+                }
+            });
+        });
+
+        // Track contact link clicks
+        const contactLinks = document.querySelectorAll('.contact-link');
+        contactLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const contactType = this.querySelector('span')?.textContent || 'Unknown';
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'contact_click', {
+                        'event_category': 'engagement',
+                        'event_label': contactType,
+                        'value': 1
+                    });
+                    console.log('📊 Tracked: Contact click -', contactType);
+                }
+            });
+        });
+    }
+
+    // ============================================
     // INITIALIZE ALL
     // ============================================
     function init() {
@@ -260,6 +312,7 @@ Visit: https://github.com/robin-tennessine/portfolio
         // Core functionality
         initSmoothScroll();
         initNavigationScroll();
+        initEventTracking();
 
         // Optional features (require config.js)
         updateContactLinks();
