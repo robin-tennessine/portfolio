@@ -189,7 +189,7 @@ ul {
     display: flex;
     align-items: center;
     padding-top: 80px;
-    background: linear-gradient(135deg, #0A0A09 0%, #1a1510 100%);
+    background: #0A0A09;
 }
 
 .hero-content {
@@ -326,7 +326,7 @@ ul {
    ABOUT SECTION
    ============================================ */
 .about-section {
-    background: linear-gradient(180deg, #141413 0%, #1a1510 100%);
+    background: #1a1510;
 }
 
 .about-content {
@@ -385,7 +385,7 @@ ul {
    EXPERIENCE SECTION
    ============================================ */
 .experience-section {
-    background: linear-gradient(180deg, #0A0A09 0%, #141413 100%);
+    background: #0A0A09;
 }
 
 .experience-timeline {
@@ -456,7 +456,7 @@ ul {
    PROJECTS SECTION
    ============================================ */
 .projects-section {
-    background: linear-gradient(180deg, #1a1510 0%, #141413 100%);
+    background: #141413;
 }
 
 .projects-grid {
@@ -559,7 +559,7 @@ ul {
    CONTACT SECTION
    ============================================ */
 .contact-section {
-    background: linear-gradient(180deg, #0A0A09 0%, #0f0f0e 100%);
+    background: #0A0A09;
 }
 
 .contact-content {
