@@ -31,7 +31,7 @@ COLORS = {
 # Constants
 NUM_TRANSACTIONS = 50000
 START_DATE = datetime(2023, 1, 1)
-END_DATE = datetime(2025, 3, 7)
+END_DATE = datetime(2026, 3, 7)  # Extended to current date
 
 # Sales channels with distribution
 CHANNELS = {
