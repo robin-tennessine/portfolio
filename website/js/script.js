@@ -252,6 +252,41 @@ Visit: https://github.com/robin-tennessine/portfolio
     };
 
     // ============================================
+    // VISITOR COUNTER
+    // ============================================
+    function initVisitorCounter() {
+        // Fetch page view count from CountAPI
+        fetch('https://api.countapi.xyz/hit/robin-tennessine-portfolio/visits')
+            .then(res => res.json())
+            .then(data => {
+                const viewCount = document.getElementById('view-count');
+                if (viewCount) {
+                    viewCount.textContent = data.value.toLocaleString();
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching view count:', err);
+                const viewCount = document.getElementById('view-count');
+                if (viewCount) viewCount.textContent = '---';
+            });
+
+        // Fetch download count from CountAPI
+        fetch('https://api.countapi.xyz/get/robin-tennessine-portfolio/downloads')
+            .then(res => res.json())
+            .then(data => {
+                const downloadCount = document.getElementById('download-count');
+                if (downloadCount) {
+                    downloadCount.textContent = data.value.toLocaleString();
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching download count:', err);
+                const downloadCount = document.getElementById('download-count');
+                if (downloadCount) downloadCount.textContent = '0';
+            });
+    }
+
+    // ============================================
     // GOOGLE ANALYTICS EVENT TRACKING
     // ============================================
     function initEventTracking() {
@@ -259,6 +294,19 @@ Visit: https://github.com/robin-tennessine/portfolio
         const resumeButtons = document.querySelectorAll('a[download], a[href*="Resume.pdf"]');
         resumeButtons.forEach(button => {
             button.addEventListener('click', function() {
+                // Increment download counter
+                fetch('https://api.countapi.xyz/hit/robin-tennessine-portfolio/downloads')
+                    .then(res => res.json())
+                    .then(data => {
+                        const downloadCount = document.getElementById('download-count');
+                        if (downloadCount) {
+                            downloadCount.textContent = data.value.toLocaleString();
+                        }
+                        console.log('📊 Download count updated:', data.value);
+                    })
+                    .catch(err => console.error('Error updating download count:', err));
+
+                // Track in Google Analytics
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'resume_download', {
                         'event_category': 'engagement',
@@ -313,6 +361,7 @@ Visit: https://github.com/robin-tennessine/portfolio
         initSmoothScroll();
         initNavigationScroll();
         initEventTracking();
+        initVisitorCounter();
 
         // Optional features (require config.js)
         updateContactLinks();

@@ -626,6 +626,35 @@ ul {
     opacity: 0.7;
 }
 
+.footer-stats {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-cream);
+    font-size: 0.9375rem;
+    font-weight: 500;
+}
+
+.stat-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-accent);
+}
+
+.stat-item span {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
@@ -661,6 +690,12 @@ ul {
 
     .hero {
         min-height: 80vh;
+    }
+
+    .footer-stats {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: center;
     }
 
     .hero-cta {
