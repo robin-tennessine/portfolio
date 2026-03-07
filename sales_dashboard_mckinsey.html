@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Performance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333333;
+            background: white;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: Georgia, serif;
+            font-weight: normal;
+        }
+
+        .header {
+            margin-bottom: 40px;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #003366;
+            margin-bottom: 8px;
+        }
+
+        .header .metadata {
+            font-size: 12px;
+            color: #444444;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #003366;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kpi-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: #F5F5F5;
+            padding: 25px;
+            border-left: 4px solid #003366;
+        }
+
+        .kpi-title {
+            font-size: 11px;
+            color: #444444;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .kpi-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #003366;
+            margin-bottom: 8px;
+        }
+
+        .kpi-comparison {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .positive {
+            color: #2d7a5e;
+        }
+
+        .negative {
+            color: #CC0000;
+        }
+
+        .neutral {
+            color: #444444;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border: 1px solid #CCCCCC;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .data-table thead {
+            background: #003366;
+            color: white;
+        }
+
+        .data-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table th.number {
+            text-align: right;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #CCCCCC;
+        }
+
+        .data-table td.number {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        .data-table .alt-row {
+            background: #F5F5F5;
+        }
+
+        .insight-box {
+            background: #F5F5F5;
+            border-left: 4px solid #008080;
+            padding: 25px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .insight-box h3 {
+            font-size: 14px;
+            color: #003366;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .insight-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .insight-box li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .insight-box li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #008080;
+            font-weight: bold;
+        }
+
+        @media print {
+            body {
+                padding: 20px;
+            }
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sales Performance Dashboard</h1>
+        <div class="metadata">
+            Jan 1 - Mar 07, 2026 | Last updated: March 07, 2026 at 11:08 AM
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Executive Summary</div>
+        
+    <div class="kpi-section">
+        <div class="kpi-card">
+            <div class="kpi-title">YTD Revenue</div>
+            <div class="kpi-value">$2.4M</div>
+            <div class="kpi-comparison positive">↑ -4% vs Last Year</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">YTD Sales Growth</div>
+            <div class="kpi-value">-4%</div>
+            <div class="kpi-comparison negative">↓ 14% vs Target</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Forecast (Full Year)</div>
+            <div class="kpi-value">$13.5M</div>
+            <div class="kpi-comparison positive">↑ -4% vs LY Projection</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Target Achievement</div>
+            <div class="kpi-value">2%</div>
+            <div class="kpi-comparison neutral">On Pace to Hit 8%% Target</div>
+        </div>
+    </div>
+    
+    </div>
+
+    <div class="section">
+        <div class="section-title">Performance vs Target</div>
+        <div class="two-column">
+            <div class="chart-container">
+                <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                        <script>window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.4.0.min.js" integrity="sha256-KEmPoupLpFyGMyGAiOsiNDbKDKAvxXAn/W+oQa0ZAfk=" crossorigin="anonymous"></script>                <div id="monthly" class="plotly-graph-div" style="height:350px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("monthly")) {                    Plotly.newPlot(                        "monthly",                        [{"marker":{"color":"#003366"},"name":"Actual","width":0.4,"x":["Jan","Feb","Mar"],"y":{"dtype":"f8","bdata":"ankvCPa58D9Udrgli77wP4jnGbl2+9U\u002f"},"type":"bar"},{"marker":{"color":"#CCCCCC"},"name":"Target","width":0.4,"x":["Jan","Feb","Mar"],"y":[13.333333333333334,13.333333333333334,13.333333333333334],"type":"bar"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"Arial, sans-serif","size":11,"color":"#333333"},"title":{"text":"Monthly Sales vs Target","font":{"family":"Georgia, serif","size":14,"color":"#333333"}},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"margin":{"l":50,"r":20,"t":60,"b":50},"xaxis":{"title":{"text":""},"showgrid":false,"showline":true,"linewidth":1,"linecolor":"#CCCCCC"},"yaxis":{"title":{"text":"Revenue ($M)"},"showgrid":true,"gridwidth":1,"gridcolor":"#EEEEEE","showline":true,"linewidth":1,"linecolor":"#CCCCCC"},"barmode":"group","height":350,"plot_bgcolor":"white","paper_bgcolor":"white","showlegend":true},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+</body>
+</html>
+            </div>
+            <div>
+                <div class="insight-box">
+                    <h3>Annual Target Progress</h3>
+                    <ul>
+                        <li>Annual Target: $160.0M</li>
+                        <li>Current YTD: $2.4M</li>
+                        <li>Remaining: $157.6M</li>
+                        <li>% of Target: 2%</li>
+                        <li>Days Left: 299</li>
+                        <li>Daily Run Rate Needed: $527K</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">YTD Comparison (2024 vs 2025)</div>
+        <div class="chart-container">
+            <html>
+<head><meta charset="utf-8" /></head>
+<body>
+    <div>                            <div id="ytd" class="plotly-graph-div" style="height:350px; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("ytd")) {                    Plotly.newPlot(                        "ytd",                        [{"line":{"color":"#444444","width":2},"mode":"lines","name":"2024","x":{"dtype":"i4","bdata":"AQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAARAAAAEQAAABEAAAARAAAAEQAAABEAAAARAAAAEQAAABEAAAARAAAAEQAAABEAAAARAAAAEQAAABEAAAARAAAAEQAAABEAAAARAAAAEgAAABIAAAASAAAAEgAAABIAAAASAAAAEgAAABIAAAASAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGQAAABkAAAAZAAAAGQAAABkAAAAZAAAAGQAAABkAAAAaAAAAGgAAABoAAAAaAAAAGgAAABoAAAAaAAAAGgAAABoAAAAbAAAAGwAAABsAAAAbAAAAGwAAABsAAAAbAAAAGwAAABsAAAAbAAAAGwAAABsAAAAbAAAAGwAAABsAAAAbAAAAGwAAABsAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHQAAAB0AAAAdAAAAHQAAAB0AAAAdAAAAHQAAAB0AAAAdAAAAHQAAAB0AAAAdAAAAHQAAAB0AAAAdAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAhAAAAIQAAACEAAAAhAAAAIQAAACEAAAAhAAAAIQAAACEAAAAhAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACYAAAAmAAAAJgAAACYAAAAmAAAAJgAAACYAAAAmAAAAJgAAACYAAAAmAAAAJgAAACYAAAAmAAAAJgAAACcAAAAnAAAAJwAAACcAAAAnAAAAJwAAACcAAAAnAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACkAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKwAAACsAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAAC0AAAAuAAAALgAAAC4AAAAuAAAALgAAAC4AAAAuAAAALgAAAC4AAAAvAAAALwAAAC8AAAAvAAAALwAAAC8AAAAvAAAALwAAAC8AAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADUAAAA1AAAANQAAADUAAAA1AAAANQAAADUAAAA1AAAANQAAADYAAAA2AAAANgAAADYAAAA2AAAANgAAADYAAAA2AAAANgAAADYAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA7AAAAOwAAADsAAAA7AAAAOwAAADsAAAA7AAAAOwAAADsAAAA7AAAAOwAAADsAAAA7AAAAOwAAADsAAAA7AAAAOwAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPQAAAD0AAAA9AAAAPQAAAD0AAAA9AAAAPQAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA\u002fAAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABCAAAAQgAAAEIAAABCAAAAQgAAAEIAAABCAAAAQgAAAEIAAABCAAAAQgAAAEIAAABCAAAAQgAAAEIAAABCAAAAQgAAAEIAAABCAAAA"},"y":{"dtype":"f8","bdata":"+UreCKQnWT\u002feOZShKqZiP3QVnAttSos\u002fTPYy\u002fjuqiz\u002fU+jKDvhWNPyF6KacDeo0\u002fNuSfGcQHkj+4\u002fLBzDRKSPyye3c581pI\u002fvmn67IDrkj9h\u002fNHDEgeTP99aHlKpZaE\u002fJSENfk2coT8EDSaTjeaiP+mDfgmJcqM\u002f8eFIVjSMoz9JNFij5PajP56Kp2CFQqk\u002fJmNKXnxVqz9txsyy5WSrP4EZvkvKWa0\u002fIbp3PzQUsT9ewfTF9yixPzhGX\u002f9937E\u002f2DbegENmsj9I6fPNDbizP6PFKaUtz7M\u002fvP9+582XtD+SppPPn\u002fS0P3aPdB\u002fj\u002frQ\u002fJYok1dI3tT8YYrucjte1P9dz2mwP77U\u002fy9WfL4NStj+sdpfVhWm2P42XXeYqzLY\u002fzp\u002fr0vFeuT\u002fUuU9M5nG8P9vviXWqfL4\u002fATAJ3UZ\u002fvj+nkFR0XkLAPwgriGCgFMI\u002fslXdflQewj\u002f64FIhYCXCPxIwBEpUOcI\u002f19\u002f54t4+wj9Q1gNB20XDPzxmybEvuMM\u002fbLXyWFTAwz8uX\u002foL+8XDP\u002fq+G39glsQ\u002fr5X53EOhxD+1ZhoDoavEP6NtqUGgzMQ\u002fuAcIg742xT\u002frUm2BTlLFPzT1Z\u002f01csU\u002fM87fhEKExT9onypTiqXFPzst9JizhMY\u002f+MzcjU8Sxz9U\u002fTm7az\u002fHP\u002f+caV\u002fMWMc\u002fCqXUyikmyD9UzwaJgtPIP6k53LvE4Mg\u002foPaMK8vjyD8fJadd6QjJP1\u002fYP\u002fRJE8k\u002fT1dF8nQyyj\u002fa\u002fgAxKqXKPwzmOzqm1co\u002fgYO8P1rzyz+VBq9EPVDMPwV9Q117Ucw\u002fF\u002fEpQuKFzD\u002fwsfShC+rMPytlzgp39Mw\u002f3pQ86CM6zj+szL1VEU3OPyLea+\u002fwqs4\u002fPLaeIRyzzj\u002fvWa2fQNDPPxz+unBz7M8\u002fgwmiDxL5zz8FqVZX7IzQP5ojVD4+wNA\u002fU+MxRbHD0D8npBxp\u002fMTQPxR6BbvExdA\u002fk4d0LnvI0D+k9q6De8zQP\u002fqyghky4tA\u002fmfB0fO7j0D+TvVJUBfzQPyv1l6Po\u002fdA\u002fcz1lkBYC0T96ChQMQpTRP4yUf5DZl9E\u002f9pRJy1Cu0T\u002fVaReyPs7RPzEWApBF4NE\u002fmpgVJ0qE0j\u002fXAAjMAYrSP1rZyo0autI\u002fx5tnsqAs0z+FlMjTLC\u002fTPzz9JGf2c9M\u002fAlK8RqKC0z8bkWJfNirUP443puUPn9Q\u002fMeHI6vOk1D\u002f6HFAdSKrUP0Kqk\u002flordQ\u002fMKsL01LU1D98ltaVheXUP9PMzRaUEtU\u002ffwkuuf5b1T9Kc9g7q17VPyhFElpiZ9U\u002fWGL5Tid01T+CGLag1njVPyxsSNTyINY\u002fr4BCPX1E1j\u002fJVbC292PWP+REJqYsf9Y\u002fYuhLTnGF1j8d5eRupZHWPxXgYBSp1dY\u002fCY\u002fTY53i1j8AFXWD9FbXP3PTC+MTl9c\u002f4p3w0H+o1z9iwmDlbbjXP1L+vS271Nc\u002fsNY3zY7W1z+5QsRy8DHYPxRsyOR51dg\u002fCQO\u002f2\u002fYc2T\u002fyY92JozzZPxkl+VtMPdk\u002f2x4xOFKP2T8rUe4lKufZP3oUbCsPNdo\u002fh3EGmFw52j+pvusaylzaPweK5bdkbNo\u002fe9+uTRlu2j9ED982EYXaP\u002fxXyvCnn9o\u002fGx5GMQ6o2j8hu\u002fNAO1LbP7pcJ6Idv9s\u002fZi5oCGTC2z+CKtrBLcTbPxDHV47SHdw\u002f\u002fVtNxzFM3D8EOiibUXfcPxtmu4Q7vtw\u002fwWfjbxhY3T8SXZNFzHLdPyayGG08dd0\u002f2x5jcpOm3T\u002fME8\u002fZAsLdP4nWUdUEEd4\u002f0\u002fOgZmkj3j+YSlANRYveP6BSka+pmN4\u002fj7RVKFa23j+v8\u002fQZaUzfP8I0NugJU98\u002fDeyuovVm3z81XuQSBYLfP\u002fkJJZvEQ+A\u002fzBcgdktX4D\u002ffrkWopXvgP7jbN+\u002fmhuA\u002fFd4fzkfi4D+ES1wBZOzgP76byZKU7+A\u002f0zyqDnf94D9YFivuaBHhP7nBaSS2GeE\u002fju3GzE8b4T+C3MFf\u002flDhPzM3U98BV+E\u002fUBuLXCZZ4T\u002f7F0Kt7ZbhP+wTk3ncnuE\u002fNaTuVtik4T9T\u002fWOEZL\u002fhP4ankXW80uE\u002fHwWySxLT4T8lau2mKdzhP+2e8p653eE\u002fHe3JDdDn4T8Di4nu1f7hP8RyKp04DuI\u002fUklT8wsl4j8V7ND6pS\u002fiP6cUAW\u002f9S+I\u002fQ0NSTUFl4j\u002flsvJHKGjiP0LR2VWKdeI\u002faHWsMWy94j99\u002fXNF58TiPyfZRSy90eI\u002fskXzfN3U4j8s5YQiQNriP7qZVcgq\u002f+I\u002fzfgIRm8C4z+hG9RdXR7jP81aCkj7H+M\u002fghzWTKVc4z8\u002fHl0ZEl\u002fjP+CLq6E\u002fmuM\u002fuqsVdf+b4z\u002frW0EuzJ3jPwpJyR\u002fKn+M\u002fRLxcYU2n4z+YJRFM+6fjP6vucL9ssOM\u002ftag21ebB4z\u002fRZzhM0d3jP26ETbbk5eM\u002f4cVvyA4D5D8PwrNvtATkP5OcwDI+BeQ\u002fcLyW68gM5D9Lf8xaTGTkP+TTjNo3duQ\u002fqj6h6Mt85D+3kZmoMYPkPzCVp0ELqOQ\u002ftZFGYAep5D\u002fkMSSj2rLkP34kPtqsuOQ\u002fgLEhrIQW5T9y2pWOIDLlPxJIaE\u002fyWOU\u002fAjN0Jkyc5T+U94rR56HlP8Dz\u002f2gHteU\u002fNCFzhl625T9AvM9tmb7lPyVmB6bk5uU\u002fTUlzty0C5j\u002f60tufiwbmP7vkC5xkEuY\u002fJiVWqU0a5j9TnP5HAR3mP8sLVdbbK+Y\u002fz9XaJNRG5j9askvQNknmP\u002fx00cqcUuY\u002fs8Rvr3HC5j8c1zNCR8TmP9241ig1xeY\u002fbZGLnEvy5j9pKeZB9hHnP0g8bjKJHuc\u002fP120Mqds5z8F\u002feDXo4vnP6z7CV9Gjuc\u002ftF0VZqmO5z99463r\u002fo7nPzqQcZxGoOc\u002fHUkwcqLf5z+3fKDsmODnPy3U7S5I4ec\u002fKs7Fndry5z+F9EZzhTPoPxihRPBkXOg\u002fwSGn8QNe6D9QKfpssmDoPwsZdrVoY+g\u002f\u002fhzNLmuE6D\u002fiF6BlxKLoP1OjHVgK2Og\u002fZkdHxUHa6D\u002fg24nMO1LpP0k3LojtU+k\u002fmi7NpZ9t6T8WRFoZQ2\u002fpP+s\u002fMh06fek\u002fqWmkxgCA6T\u002fu1MDisoLpP7ron55Gs+k\u002fAMmese286T94vG8AJv7pPyBi72peGuo\u002fzPOnjepU6j+4X0cUQXnqP0qCN6RRgeo\u002fxclI5iaE6j+eJyunuYzqPygA39AIlOo\u002fzCUD3eqb6j\u002fWEmaY4sPqP1P6QxJBxeo\u002f6oNFqMbJ6j\u002fWnrTLEtjqP9amiD7l2eo\u002fZSdilfvy6j8Mb4xTY\u002fjqP0c+fohwQOs\u002fCVStIi9N6z9Hmj+mtYnrP+GMOM+ejOs\u002frCrSL9fD6z+zGPK+4OnrP1Ifehh76+s\u002fn\u002fpa2TYT7D9ZyOGbvyzsPwJx1MBFPew\u002fuqkGad8\u002f7D\u002fPBS\u002fZ\u002fEjsP5i\u002fEfZQT+w\u002fNmvoTeJf7D\u002fNo6DjvGLsP40z6q3Daew\u002fV0+tvrpq7D\u002fNQ\u002fFT6mzsPy8Bpqnx1Ow\u002fzEJt4ZrX7D9hGW4CBNrsP53hUVNg2+w\u002f\u002fL3rngJh7T+slRJ65GztP1mW6XZ6bu0\u002fWsMtmxCl7T+JyW6oENbtP3S9VVNp1u0\u002fTCxkbPD37T9L7ASoZwnuP19bs1N7Cu4\u002fSCw6o\u002fcX7j\u002fftmxjolfuP9d\u002fz9V3Wu4\u002ff\u002frYVS9c7j\u002fELzDp93buP3wqTc55e+4\u002ffEbp0r+E7j84SOxmiJvuP2qjAbwFsu4\u002fVY81AnWz7j80TJdyfLzuP6r7QwrQvO4\u002fUAuZ6WY47z9A8luVwD3vP8CUSKKXUe8\u002fhufPK1xe7z9ws+SW+2nvP9ehJ4ZgjO8\u002fYS1PMRiN7z\u002fv5x2fd6DvP+21kBU2ou8\u002foIgtuWGm7z+dRVs6i8PvP7DC2yDm1O8\u002fUubWOUDv7z+rE49yzfDvP2u8ps1ZC\u002fA\u002fUH0pNPcN8D\u002fKirhrzx3wP+HGDNj+I\u002fA\u002fzNjh+VYl8D\u002fq39SLyivwP9tJfqOhP\u002fA\u002fhlk\u002faANB8D8s1NSRp0XwP2Sa+op\u002fSfA\u002f8UO+rtNm8D8n8RTNXpHwP53v4XHVlfA\u002fIHXY0A+r8D8BWGgQtKzwP4dS72eAtPA\u002fnibpUDzt8D+S0dBYXvbwP9sE56XFHfE\u002fasiqzosf8T8D1ZLQjiLxPwSk3AHHI\u002fE\u002fzTTdwiUt8T+B6nKMXC7xPyG+sIijM\u002fE\u002fyOfLwSI18T+qflP1fjXxP8YIAyp3OvE\u002fC4XP1sFB8T8sx0St3UTxP45CegbkTfE\u002fqfUspbpS8T+3GYddiFPxP9Nt7dDyVPE\u002fbuzyEDpW8T\u002fmk4GooFfxP3eEgYS0WPE\u002fdPffzq5g8T8xpasq6mLxP1xg8\u002f0WZfE\u002fbQOAW15m8T+10I2XC2jxP6C\u002fwEG1cPE\u002fMsLLoX9x8T+Eoyc803HxP4fAWN\u002fAdPE\u002fnc6imDh58T\u002foKzhRhX7xP1meWr+Rh\u002fE\u002fg8VmTxuI8T\u002ftYd0VTYnxP+U7rvzoivE\u002ftag\u002fkPaO8T9oSGCcjY\u002fxPxXQ8tmNkPE\u002f79Th8JuV8T8uAL8M56bxP6pZoSfpqvE\u002fuuHjuPiw8T9zZxY2PcfxPzaQP2IFyfE\u002f8MScNbLa8T+\u002fnGaihODxP\u002fB0jRo84fE\u002f133YHDHk8T8rn1nQg+TxP88kDF5P\u002f\u002fE\u002fHEQZRzgP8j+AtFJKABXyP+oTm+okFvI\u002f2oYHgyFR8j9lPJX8HWTyP65mbAEEcPI\u002fokPxdPh18j\u002f35\u002fVpDXzyPyoCUlGrfvI\u002frg70Dr+E8j9FdI2edIXyP+k+thszj\u002fI\u002fgNKC3dGb8j+3t0uwctfyP72CLPKI3fI\u002f07hQXALe8j9oAOtIYOnyP+LXtPdO8fI\u002fk41iFF8Y8z8O3Ynl2CLzP\u002fyhPm5kI\u002fM\u002fmdNlMbEp8z9mxUf2zjnzP+uBwfvLOvM\u002fytz46hU88z\u002fhitUwjUDzP3NHva\u002fjQvM\u002fgBXYSoVE8z9orOQATVbzPx8\u002fyHBEYPM\u002fI1WxhPd98z91ubnfPo7zPxfRwNn3kvM\u002fSjbsMXCU8z841w81+pbzP1rcNdcfp\u002fM\u002fOeuVqpuo8z\u002f1qdfr5cDzP6iKJbxvwvM\u002fvY4XVhrG8z\u002faiTfX1cnzP3s4moZVyvM\u002fvNASGnf58z\u002fJS2nDghf0PyqD1R4XIfQ\u002faD0Zb21Z9D\u002fa69Wupm70P226rxQTdfQ\u002flCjedfR39D+6fC3gTHn0P9Jd6ecTevQ\u002fN3Dm26uE9D81zUO\u002fGYn0PwubQ0qajPQ\u002fgte6FiWP9D89KdU2rJb0P5wV1UshmvQ\u002fQGzQNLSj9D\u002flu\u002ffkH6X0P3TenJ1OqvQ\u002fId7ntkyv9D+Lv5rB57D0P+394xCzz\u002fQ\u002fvgspeVTQ9D+pN+UCftr0P8Cl1tp\u002f3fQ\u002fbdzNGXLo9D9Ox5T2o\u002fT0P\u002fb67rFP+\u002fQ\u002f5dLf6LYW9T\u002fXIyYLDBf1P1ox+fJEGPU\u002f76ArdNIZ9T8Zb5ZYOhv1P9ygOHgNJ\u002fU\u002f\u002f1nS1UYq9T\u002fIyWn0Dzf1P+TnVGyrPfU\u002fQKyzMeE99T++LmjGR1D1P9FMSTkMVPU\u002fRiSOZY9a9T8oYyHfSlv1P47zcUyaX\u002fU\u002fwbb6wSuP9T+T5tGFP5D1P+UOozkVnfU\u002fsaSBxBue9T+Vm276L6f1Py47aYb5p\u002fU\u002fvgXIhiSp9T9WokfnV671P7zQVDZJr\u002fU\u002fZsc+rxWw9T\u002fLGPbm\u002fbD1P8fP6\u002fQowfU\u002fIS1jfeLE9T95gILmzsf1P4Ip2oeCyvU\u002frhoZHtrL9T8q84dNAcz1P\u002f91sPZe2fU\u002fYZQchyzo9T\u002fLqM9hAOn1P4vKRBnDH\u002fY\u002fargz2WA99j8x0s32z0D2P4MZ+PZTSPY\u002fDIDxDBpK9j+Wz5eDRUr2P206hvD9V\u002fY\u002fry0bISxY9j9nniKolnT2P1rDA9IXdfY\u002fF5AP3WB29j+gZSfNMJ\u002f2P54MEsv7ovY\u002fzKmV8CGk9j+p3lz0\u002fMb2P10BAUJW3fY\u002f3R1CKv\u002fp9j9ZraexGCD3P40IpbO8IPc\u002fqaCi6lcq9z9PbZmhK1D3P41\u002fn3HhUPc\u002fsbr+8gNW9z\u002fI6MqxBln3P+S2CTnnbvc\u002fRbuOYeOE9z9rmMpwdor3P4Sm4zl0jfc\u002fe9RnIPmn9z8\u002f0jP\u002f4Kr3P1vEoOEH5vc\u002fwMyxm50V+D+UDEJxrh74P5MMxqlSKvg\u002fQ3tpSOQ0+D8OMwsf1zf4P8EQxSYqQvg\u002fKII4Dydg+D9ohXUl+mP4PyKGBCkEdPg\u002fAhytMJ59+D\u002fmbGTLsKn4P7DCsVft1Pg\u002fU3dECSPb+D\u002fNHgXbyuP4P2aIQk\u002fz4\u002fg\u002fSnJl9bP9+D+FL0Q1wv74P7NBouCUH\u002fk\u002fOvlfdJpB+T91O\u002fvKg0T5Pw2o9YYURvk\u002fIsWdXmtH+T9MXq6PmEr5P0t+vD4QTPk\u002fC0s0LyRT+T8\u002f3FnkbFT5PywVjv+GWfk\u002f9TMOWOZb+T+6M8l+zG35P8sUMfShbvk\u002fkDRNEiqc+T+HWqo9srr5P0dY8ZkuvPk\u002fd5zDMaK\u002f+T\u002fxb6ffS8L5PyfGKozK2fk\u002fhClnezbz+T9UHpvsuPT5P9Zh2KNo\u002fPk\u002f0nieT08F+j\u002f38tCxYgz6PwxZ3eo5Gfo\u002fIhP43Gww+j\u002f7EZbj2zz6Pw99+2PvP\u002fo\u002f7968\u002fkVc+j8D2B3etVz6P0KWaD06Xfo\u002f4egyTqZe+j8V7DuWqV\u002f6P3E5XoHoafo\u002fD0MOvu5s+j\u002f4U4jsKJP6PyiazQQ\u002fsfo\u002fcMFr+mC3+j\u002fZkbgBfsH6P6CwSDxuwvo\u002fOmFGofrx+j89LD826v36P2sB2laz\u002fvo\u002fuB9bXAQS+z9b6d5YihP7P5eCLBOXFvs\u002fD7ox+0QX+z+sljrp+Rr7P5Blj4reHfs\u002fXUzoBQoi+z9yShaDySX7P71LwZ6fN\u002fs\u002f4iJJc9hL+z9xPDMcKlH7Pzx5V15uV\u002fs\u002fpG\u002fiFrlY+z+hnUY5HGb7P\u002f+LwT98a\u002fs\u002f11+3ISmG+z8q03DjeY37PwVU5TkqkPs\u002flfP2zgWR+z8yJC+E\u002f5H7P8SpzQcdl\u002fs\u002fmQRN8PKZ+z\u002faix1kxLv7P5xoqR9IvPs\u002fWNCbJyq9+z\u002fFTzXdX9v7P9fOD6e82\u002fs\u002fareOWCjl+z9Yq5\u002fMeeX7P\u002fUszjn07fs\u002f3h2+8Vr++z83WcQsiwT8PyYzrBw5Bvw\u002f9NmNgAI2\u002fD\u002ff5kt38Db8P3fUA6x2Ofw\u002f9ZVyhC1y\u002fD+vA5RE\u002fnL8P0n8SBmKfvw\u002fpKqN2pJ\u002f\u002fD8tIGHWk4L8Pzak\u002fjhpg\u002fw\u002f8PyJZ1ya\u002fD+fSKycKK\u002f8P2B\u002fEp87sfw\u002fH9kiikWz\u002fD8EF5YFNM38P356jdlp5vw\u002fJS0yjWgD\u002fT8x5lvduQn9P\u002fUJbt4XC\u002f0\u002fVa+2vTgM\u002fT+cT8LxIQ39P530AA6IDf0\u002fZQopgcUo\u002fT9GGw0BPCn9PwgjzYpuLv0\u002foqCIA\u002fBI\u002fT9ig30i7Ff9P+Rn+lccX\u002f0\u002foZt5Sc5v\u002fT95jCx4VXD9P3XGUn8YjP0\u002fNniRz0yM\u002fT\u002ftJYVg8qL9P1mAz3JNr\u002f0\u002fBqeJZ57W\u002fT8CBDHYJgj+P\u002fhmtLhzL\u002f4\u002flWFxcp41\u002fj9GWwmbCT\u002f+P\u002fLS4sYMSP4\u002fsA+RHq91\u002fj86HxJ823X+P72rkoYidv4\u002fSGBzDp55\u002fj+o+WSkYnz+P9NduPeZiP4\u002fn0CGK\u002fOI\u002fj8s3rhaYYn+P3mnPJkDjf4\u002fUV6Oy3aN\u002fj\u002fqBTRL4ZX+P\u002fquhMUTl\u002f4\u002fQjmwoFmX\u002fj82jQ7EiZr+PzAdIaBOm\u002f4\u002f2xAERJid\u002fj9N7pg286b+P8uX1UNNp\u002f4\u002fQDwaoJfO\u002fj\u002fnSj5VCc\u002f+P8tvHKE03v4\u002fFnz1TIoK\u002fz9kFz7o+gr\u002fP0caq+acDP8\u002fkarEp8YM\u002fz9gM48VXxH\u002fP4G5m6+rHP8\u002fUDKM\u002fV1G\u002fz\u002f9ccKE0Vz\u002fP1s6e6FfX\u002f8\u002f3iSsEepn\u002fz\u002f4mAeXK2\u002f\u002fP4qlevhTb\u002f8\u002f1KXjvaxx\u002fz\u002f92C368XT\u002fP3xI4IsGe\u002f8\u002f9XkZ5oCE\u002fz\u002fwHfRTuaz\u002fP7xGiq8Tuv8\u002flNXgIpy7\u002fz\u002f\u002f4I5geL\u002f\u002fPxtuwTFPx\u002f8\u002ffdcEpD\u002fM\u002fz8UBzzVxs3\u002fP2\u002fsyZEI\u002fP8\u002fDjN3BKL9\u002fz9\u002fndXhbAMAQEWARxKMBABApfy1BgAQAEDIAC+3pBAAQIxf0947FQBAJ8ycqlIVAEDGJGWDMx0AQAUdfHrPHQBAHuKTDAgeAEBug7HwuyIAQDFt\u002f8pKKwBAl7WYyJozAEBrAeMRwzMAQG3IcW3JNgBAxAFww1pKAEAVb57JgkoAQKkbORynUgBA7yOnRExoAEBpTbFygW4AQN8HSn6CcwBA7tZDReZzAEDZbXrEpnUAQNhzmZoEdwBAb4BPYsZ6AECYWOicApUAQEQsvZHUlQBAInMTUgqkAEAXfiaxWqcAQM3tLf4ZqgBA8SgJR5irAEBFZbO4OawAQByageOVsABA4YlaeU3AAEBeW1iaCMEAQHYnuLt7xgBAZjS5GAPLAEAvwC5Y5M4AQFRwqnuF0QBAewUGnOfoAEDkqEgq+OoAQP7dRCVc7QBA2HtEjqXuAECJWquHefAAQDOIGKcI9QBA7KusTHz2AECzQ4FGAvgAQL0SUURt+ABAkSJ9g8T4AEANANpeJP8AQNFFIwKC\u002fwBAWIKdrGIbAUBnIH56QxwBQBkc5NzDKQFAOltBsgQqAUC3Z27PPUUBQEoUdL1lRQFA65w1kfxFAUC+uvHuyEgBQPqRhqYuSQFAwP94ChRUAUAHfWb\u002f8l8BQPeMRbLLYAFA6oUsf3xhAUDiORpuXW0BQKmSNCSTcAFAli1qQTmLAUBtXzkIW5ABQHAjRceCkAFAPQc8tLiUAUA+QQDbh5UBQDYsFre4owFAz\u002f2trlSpAUByEmy3uKkBQNgxZXXlqgFAyw3qri6vAUAlRPJblbABQOhLLq0jsgFAhQHQMM6yAUCOZU64070BQF8yJECwxwFAbV3nlaHIAUCz4HeZgskBQFLhASuozAFArWYJ10jfAUASNvvqR+4BQKD26C4F8wFA1N7hVVr3AUCgRJ5meQ0CQJiC489DDwJAS6P7\u002f1kPAkC0ZGaw8yACQJCaf+zcIQJAhk0Kd1cjAkAdUD+gGiwCQCa3H7YVLwJA5bkihIkvAkCPjnIwmzACQJDFeQ8CSAJAvT62PEFIAkDeR8pQ9EwCQEduXuaFTQJAhsRv0H9TAkCqZRl\u002fLlQCQDQd+WrkVgJAnAAGWYFXAkD8uPWBgVsCQLcEr6\u002fYYwJA6pwDV7tmAkB9eCMU12gCQJnmFTagaQJA2MElU0dvAkBmJsbP0m8CQBbxbKh7cQJAiRlVRFV1AkDTz6y2rIQCQC2djOA1hgJAdcelAe6HAkCQyDZXaokCQF8FASoDjAJAL1FCuBuPAkDipnJ\u002fmo8CQPCkK1x\u002fkAJAoqWH24CTAkDJ1\u002fpcTJcCQGZAEGJfmQJAmgBQ5pucAkBO8NJV07ACQHwuVN2nwwJA68L\u002f6xbIAkANHWVxvc0CQC3p76Xw0AJANbyc6ZDRAkC8uI5Qt9QCQFpRY6X22AJAj5w8+pnZAkCOKkDKPt4CQNm7\u002fguh3gJA9\u002fycJ0PiAkA6aGb7yuICQGknnYpM7wJAAf90Zi8JA0BwcZ9FhAkDQAsqDvMnCgNA0XUkboAfA0BoCAqTFCYDQBzQslFKJgNAMsmolbYmA0BTU5swSCcDQIZWas3BKQNA\u002fHJG9yAqA0BKNPbC8CsDQGSyHHRLMwNAkXcXILg3A0BXvA6LB0IDQFtZzHzFQgNAe\u002fpLYntDA0DODG\u002f37k4DQOYxNhn6VANA2HrJ1mVWA0Ae5EnzQ1wDQF1rKkmmXANAxx\u002fT2jReA0ADuqQHkV4DQLyL1x\u002fVXgNA2Wl0\u002fz9jA0CQg7CF5mMDQIxco4qHZANAvj6FTMdmA0D2YqU4\u002fWcDQIRQtpJnaANAEV8X8sZpA0AFv8xeU2sDQHMHNrbwdwNAES1h6VORA0C\u002fUBx6apEDQEIPU40kkgNAto16RiqVA0D5BLxx95YDQJbKgaKinwNAHqP7IGigA0Dbw9s5g60DQBFS0ZoXtgNAVAWU+nC4A0Bdx6lKGcADQH7BLQaswANABYDpm9HCA0Agra75p8oDQIMSwt04zQNA1xinxvDdA0B3oD\u002fhquIDQM\u002fHnphQ5ANAfu+zgL\u002fmA0CVIHcytOkDQNgGQtOO6gNAqQgw8tP8A0BDEehldwUEQCPzkAgRCQRAzezUnooKBEDg3nmYrBAEQNOjs6OjEgRAi6C\u002f0CMWBEDQcGCLQCEEQBEn8BSTIwRACQ6kKCMoBEC43\u002fW6wS8EQBMCkY8nMwRAsd42UyE2BEDf\u002f27kLjgEQGm6VaVnOQRA+3ba+QJDBECEd0fGakMEQNSCIYLcQwRA8pFDQJVFBEBuwBKb0UcEQPCkbsIYVARA"},"type":"scatter"},{"line":{"color":"#003366","width":3},"mode":"lines","name":"2025","x":{"dtype":"i4","bdata":"AQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABEAAAARAAAAEQAAABEAAAARAAAAEQAAABEAAAARAAAAEQAAABIAAAASAAAAEgAAABIAAAASAAAAEgAAABIAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAEwAAABMAAAATAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAVAAAAFQAAABUAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAGAAAABgAAAAYAAAAGAAAABgAAAAYAAAAGAAAABkAAAAZAAAAGQAAABkAAAAZAAAAGQAAABkAAAAZAAAAGgAAABoAAAAaAAAAGgAAABoAAAAaAAAAGgAAABoAAAAaAAAAGgAAABoAAAAaAAAAGgAAABoAAAAaAAAAGwAAABsAAAAbAAAAGwAAABsAAAAbAAAAGwAAABsAAAAbAAAAGwAAABsAAAAbAAAAGwAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAcAAAAHAAAABwAAAAdAAAAHQAAAB0AAAAdAAAAHQAAAB0AAAAdAAAAHQAAAB0AAAAdAAAAHQAAAB0AAAAdAAAAHQAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAeAAAAHgAAAB4AAAAfAAAAHwAAAB8AAAAfAAAAHwAAAB8AAAAfAAAAHwAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIQAAACEAAAAhAAAAIQAAACEAAAAhAAAAIQAAACEAAAAhAAAAIQAAACEAAAAhAAAAIQAAACEAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACIAAAAiAAAAIgAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACMAAAAjAAAAIwAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAmAAAAJgAAACYAAAAmAAAAJgAAACYAAAAmAAAAJwAAACcAAAAnAAAAJwAAACcAAAAnAAAAJwAAACcAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAAoAAAAKAAAACgAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAApAAAAKQAAACkAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAAqAAAAKgAAACoAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAArAAAAKwAAACsAAAArAAAAKwAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAAC0AAAAtAAAALQAAAC4AAAAuAAAALgAAAC4AAAAuAAAALgAAAC4AAAAuAAAALgAAAC8AAAAvAAAALwAAAC8AAAAvAAAALwAAAC8AAAAvAAAALwAAAC8AAAAvAAAALwAAAC8AAAAvAAAALwAAAC8AAAAvAAAALwAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMQAAADEAAAAxAAAAMQAAADEAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAAzAAAAMwAAADMAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANAAAADQAAAA0AAAANQAAADUAAAA1AAAANQAAADUAAAA1AAAANQAAADYAAAA2AAAANgAAADYAAAA2AAAANgAAADYAAAA2AAAANgAAADYAAAA2AAAANgAAADYAAAA2AAAANgAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADgAAAA4AAAAOAAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA5AAAAOQAAADkAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA6AAAAOgAAADoAAAA6AAAAOwAAADsAAAA7AAAAOwAAADsAAAA7AAAAOwAAADsAAAA7AAAAOwAAADwAAAA8AAAAPAAAADwAAAA8AAAAPAAAADwAAAA8AAAAPQAAAD0AAAA9AAAAPQAAAD0AAAA9AAAAPQAAAD0AAAA9AAAAPQAAAD0AAAA9AAAAPQAAAD0AAAA9AAAAPQAAAD0AAAA9AAAAPQAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPgAAAD4AAAA+AAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAAA\u002fAAAAPwAAAD8AAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEAAAABAAAAAQAAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABBAAAAQQAAAEEAAABBAAAAQgAAAEIAAABCAAAAQgAAAEIAAABCAAAAQgAAAA=="},"y":{"dtype":"f8","bdata":"3nw8VwhpVT9c96CxQAVhP3pU29Eo8n4\u002f71zOWyuQfz+npNrp\u002fwOJP8yMK+xx+I8\u002fnwKiWFXMkD80O\u002f80vd2VP6u\u002fb40Z8pU\u002fBem1G3Vblz9DFDh+TXuXP36XjEIWkpk\u002fQwhEX6w1nT924EFYMmydP4EajEs0zJ0\u002fzSh1TXHqnT\u002fUDuJ3kRGhP7mezx1QeKE\u002fo1ba2qlWoj\u002fA2d5VrG2iP4WqwclwG6U\u002fqXXyVE0xpT8PocaUetymP4BiZMkcy6c\u002f1HOgwYXAqD+cLJxBz6irP6DgxW\u002fIDq8\u002fufUFuhcUrz+Ir2XojrSxP0GugWv2WbI\u002fugF2oBTOsj\u002fqmzQNiuayPxL6X89T9LI\u002fS18IOe\u002f\u002fsj\u002fR8GYN3lezP9Kva4MsbrM\u002fNM0JFJB6sz\u002fLIkVLuyS0P+af8ETWO7Q\u002fDnGLffJFtD+L6NfWT\u002f+0P+C6B40FKrU\u002fhVyx2Ik\u002ftT8y4Bv5clW1PwGH3E5TsrY\u002fnCZLMTDAtj8VwnoO8pu3Px5rTncBo7c\u002fyBDfDZLTtz9ZpuNagsa5P9V930OyFbo\u002fT9hVs5RNuj+lGSh8+Cq9P5VhgVQvZL0\u002fRfMIh0ENvz+lYedcQB6\u002fP6LUh8MMbL8\u002fi102laCawD99wxJJ06TAP4zJNP2GR8E\u002fXO1hLxSwwT9\u002fEsi68rjBP9aCcjZ4usE\u002fWzT4Vn\u002ffwT+QZlUZAAnCP83vl8OsH8I\u002fkRU+U5Y+wj9u0BOmWlHCPyUjb9KXUsI\u002fltnedrpWwj89LIFSvGPCPwQ1ECYggcI\u002fILuw2qGGwj8hDtj28pLCP\u002f2kqG2imsI\u002f583IvUzWwj\u002f211Sr6dnCP5WNaoWn38I\u002fG3Ux9vPgwj9m4ZgjMzDDP3f4QelNPcM\u002fFZZnFIGgwz8yovUJA8PDPw\u002fkfizpzcM\u002fHzb8NA\u002fcwz+y4XU\u002fny\u002fEP+qsDR1URcQ\u002fEDcBAq2rxD\u002fxnKAsALbEP3AyLkWH+sQ\u002fJ4ayKqE\u002fxj8fb\u002frMvEnGP40XLFHNF8c\u002f+zC99UigyD+E7LPSvbHIP0Y\u002fjVrlssg\u002fiyjLtQ3IyD+hGe2Gp7bJP+GI7lnX6Ms\u002fhGAK5hoszD+ZEKQ5T0jMP2\u002fCSdxbeMw\u002fOMEFE16GzD\u002f2fjc4bLbMP1\u002fhhq0T9s0\u002fJTfDDfj8zT\u002fJGQW5chPOPw5u97S77s4\u002f9r\u002fHJhogzz\u002fnC5xkkq7PP9os2amgv88\u002feCrPco\u002fbzz8Bkqe0FzTQP9lF0QMfQ9A\u002ffd9LI15F0D\u002fznj12m2DQPyIN4XdXZtA\u002fdJTNZh910D8i2jthkXjQP5k\u002f16XjfdA\u002fddj5jkyN0D8cbW6veZPQP51oX5Itv9A\u002frEi\u002fXA\u002fP0D\u002f3VguJBxbRP6xUWMI9Q9E\u002fgR+jdp580T99j6ej6xvSP7J5C9qaY9I\u002fD2McbWY+0z\u002ff914yRETTP8WFsNguRtM\u002f7f7ru6Zw0z830s5Al3bTP4HA4vQefNM\u002f4iCtcwSX0z\u002fT9MjVfqHTP9kc\u002f4m6pNM\u002frU69JIS90z\u002frrhUC8+\u002fTP731eRAr8dM\u002f98PGxP8A1D+YSWgmcwfUP1uTAmYZPdQ\u002fdadsP7Z41D8Ezc4\u002fTS\u002fVP+AIpCfZqNU\u002fuqu6u4yq1T\u002f3IAxVlL\u002fVP1Tu\u002fKp1xdU\u002fAXyuvtMH1j9f7kBb1hbWP3WQ52XaH9Y\u002feahD+i9I1j+zReJQhWDWP9ztca56Y9Y\u002fCR4pbFBF1z8WlGjq8VLXP+dhBAHwV9c\u002ffafh35Bb1z95tnDu6YnXP0nrZk6wYtg\u002f8KKe9HRk2D9WnDjzimvYP7iirGOFcNg\u002faiIJTr982D\u002fIzVdmnbPYP2trRDAO7tg\u002fW3bSDPPv2D8ijMDUphzZPzSvl2TsHdk\u002fthAmvVYf2T9xy2hgu6bZPx0Ov1lSx9k\u002fmmP1HpnU2T9\u002fkAKXCffZPwcbrkC6+dk\u002fDF6y+dHT2j8vdvusMpPbPwMpkF2SmNs\u002f3WqMjMS62z8599NWV0vcP2IwA75wYdw\u002fJK9a2wze3D\u002feD0\u002fhzubcP0m123BQ6dw\u002fo8cY7Svu3D+1hKVP5RPdPzfmr2+rSd0\u002fReO7Wg9b3T9swmrqRJvdP2ZY91Xant0\u002fmE4MRZGg3T\u002fN+M6a5RPePwUimxaCfd4\u002fPwcz+aj33j\u002f9ozUnq\u002fnePzZ0u7CYBd8\u002fFCb3AWk73z9viUPTZbPfP2BGmD8y398\u002f1BfnFInu3z\u002f2p4V5LAngP6PtucgUPuA\u002ft1X\u002f1gRH4D8PZ+FfwlDgP7ttW2tar+A\u002fs4S1MXbC4D9yCNExUtXgP4WCtd4t2OA\u002f4+jwMdTY4D9gyiudMN3gP2xvSz88JuE\u002f7qA7VmMo4T8VTupPCzPhP9SShbcgfuE\u002fwE+4yzyB4T8visuv7pHhP8NJiRNOweE\u002fYua\u002fMC7P4T8C\u002fox\u002fXdXhP7mmDiwm2uE\u002fHhrkaG3e4T8wFSNkg\u002fnhPwW9y6A1+uE\u002flhugj4374T\u002fsT48r\u002ff3hP41oQxc3AuI\u002fyI34oRQF4j8EzXOG2h3iPy90kJ3YH+I\u002fauOQJkEs4j9g9HjO1DPiP7uF18PRNOI\u002fdUacZ0824j828O2nEDniP3kcmg2NQuI\u002fX\u002fmP+T5E4j86xxQHK0niP3Lod6v4UOI\u002ftqlG8SJ64j\u002f3xuY2I3viP5M4XJKgi+I\u002fLNFQqwGN4j+u+scIyZ7iPytton1JtuI\u002fGqUZxVG94j8DNoNsF8LiP\u002fmkn7KS\u002feI\u002fjjprnsAH4z9jpWntCVTjP2laUTncXeM\u002foycSChlh4z9KVdEnC2LjPzSACT\u002fltuM\u002fCvBYZCLC4z\u002f+UgXEoMPjP+gLOTrXxeM\u002fS91rlDfY4z9V7+NHgOPjP8YwsxGA5uM\u002fAcqlEhr44z\u002fTsBh1rf3jPzUbhaB6FuQ\u002fFjUDIuUj5D+xf43asz3kP3\u002f0PG6ucOQ\u002fRPhhzn2D5D\u002fmamRXWobkP6oBpLI4juQ\u002flm9Tj3aU5D\u002fJo45tnajkP6jzwEuZqeQ\u002flaiTQ\u002fbn5D9jfSwSTf\u002fkPymeNz4oAuU\u002fM648cc4C5T8umeex+wjlP28t\u002fnx8HuU\u002fe2pgcVkh5T\u002fhfBPY1i7lP7BoUo7yQeU\u002fCb0vFbhI5T\u002fMXkJHo0nlP7wFAejmUeU\u002fTNLa2fyE5T9koDG0tqDlP6ggy8SlseU\u002fm1SG1GHD5T\u002fhqLrsfMTlPyrgz9fJzOU\u002fD66YlRZD5j+aHzSSb1zmP1Dgzmz0XeY\u002fdawgQGVg5j97C3\u002fh8J3mPw\u002fZJx04qeY\u002fSla4xBXg5j815HVQy+fmP3yT36KTRec\u002fkhXjmSNN5z9WVttmjU7nP1h3G4rxUOc\u002fRkCddiGL5z\u002frVPDjgYvnPxBoVKa5kec\u002foSC5ToaX5z8\u002fSSUC9s3nP51bxvJTAeg\u002fO0P9cIgf6D\u002fdwwvgNSHoPzRoYx11Meg\u002fs8QTrDdL6D\u002fr3Bb6moToP9zP7tJ+kug\u002fpoo0VDmr6D\u002fAljVWB+XoPzz0mkeT5eg\u002fcKRbZVzn6D9znJge4vnoPxG0EiXnBek\u002fN4oGpT8G6T922a7xFXTpP1\u002f8Ggdmfuk\u002fUeNyF7yD6T\u002fqtY6Bp5bpPzZ0Lr3knOk\u002fsqDtwTmd6T8l+XsQn6fpPzHVw5\u002f6quk\u002fGn30PG6u6T+pVjWUHOjpPy2+sdJq6ek\u002fhCbrBdkR6j9GYnlfrijqP4HDloF3UOo\u002fwVzlhUtZ6j\u002f5c78a0m7qP6MVrMzvb+o\u002fsHSgHD9z6j8zimiFM6nqP74x6hhfreo\u002fgPZDCYa16j\u002fGLj9HFrbqPxc2ftkk3Oo\u002fAoX96OXh6j++Bhl1ayHrP7vmAQvkIus\u002fh+Xveyco6z9390kg6yrrP6bGg06EZOs\u002fPj6LjKt96z98vxJhJn7rP7EUjmKxtOs\u002fvSv0wTK26z9X3b8mKbjrPzO0lKjuvOs\u002fjkplgsjf6z8pgczvsODrP9PTFFwH4us\u002f6tNKvmXw6z8\u002fgSvRQCnsP5StkIf4Zuw\u002fg6aPp4Kd7D9z\u002fmfmLKDsPwGUfBWuoew\u002fsKOhTpLR7D\u002fHqkBOFNjsPwfxZzaX9Ow\u002fgXQCHkH\u002f7D94XAhq3xntP+HfAp7uG+0\u002f5gB1+5M17T\u002fDHjPt7kPtP7TPB5EtR+0\u002fJ5141odY7T+\u002fe1Yl01ntP\u002fGzf3WHeu0\u002fe\u002fUZBuKL7T+W3pEtopjtP6jfa8Zxme0\u002fMSrJ1\u002fGh7T+17VDBn6ntP+jxJwkNre0\u002fo1meSZO57T+rco98kMvtP2bWo\u002fR1zu0\u002fD2M8MYjb7T\u002feVRa\u002fCN7tP\u002fG5fT386O0\u002fwfSzgQn27T8ZQlHq3P7tP0xKkmszA+4\u002f8o7mRJIL7j81ZfBiJx3uP0L5PmaxHu4\u002fNywD99Ej7j\u002fyW0EuzF3uP3exaFtJYu4\u002f9tpz00Vu7j+poiQDxI3uP+sWVp7+m+4\u002fT24TD6Si7j\u002faIAVPIffuP4IIPmHkAO8\u002fz4Nvks1S7z8MxfrMem3vP61TeEy0du8\u002fNmqs1B587z\u002fEBkM+ZIHvPz7ebxcOgu8\u002foAbAcJWE7z9HWqSiFOHvP\u002f9IpOnD5e8\u002fpxwVahPo7z9hkZdWv+nvPwQkFb6lCfA\u002fCSdPFzE18D80uTjHDDbwP7JsQACAPvA\u002fFiz1yd1Z8D\u002fsNLD6yGLwPzguJHkRavA\u002fwi82xrGi8D9g33ZXLKTwP\u002f\u002f1niUjsvA\u002fb3kvCPa58D8jm0\u002fj\u002f8rwP1LmzDRpzPA\u002fXhvGUXfN8D+3t\u002f+Oyc7wP+Ak9VQ9z\u002fA\u002fgjompJgQ8T\u002fL6cEwohXxP5QL3sKAFvE\u002f6UnaptsW8T+5U3sqChjxP7dF2t88GfE\u002fAkGHM54c8T92ithxDR3xP21e1A9mKvE\u002fpySweyMx8T+NvGkjbDLxP7C0SW7iPvE\u002fnUAAX8BB8T85Jg7qbELxP\u002fF\u002fiCazTvE\u002fK2hZGJ5+8T8ykRM\u002fKYfxP8swkgOXk\u002fE\u002f24vrKYOU8T\u002fhoJuiyJ\u002fxP00xqz0NpPE\u002fHp0DNq3V8T\u002fSn4ioNubxP4eNsTRs+\u002fE\u002f6yCuvcv88T8tU\u002f0xSgPyP4iA56QYDPI\u002fLs8fRzEo8j\u002fwtCxnCCryP\u002fBryAWILvI\u002fGU9uwlpI8j8lGg4yZl7yP3pXXSRAX\u002fI\u002fNISs2ZBg8j9n4Wbp8WjyP+we2BJuafI\u002fftD0KwBq8j81hawTPJryP6YMn76vm\u002fI\u002fGUo++k+c8j9kUu+Ijp3yP8ZfDrN+oPI\u002f0n682+Wg8j9py\u002frmYaXyPx\u002fINwRcuvI\u002f5tCEu+3B8j8eUQsM9sLyP2i2jdS11fI\u002fiZZk0wDk8j\u002fmT66lV+XyP+BUJ7G16PI\u002fsHuuAPDp8j9Bj+0p9\u002fryP5aHANhn+\u002fI\u002fIuY2p7P\u002f8j9e\u002fK4hmxjzP6NEjPBZK\u002fM\u002fKYRHG0cs8z\u002ffYOEkzS\u002fzP1J55y94MfM\u002ffUpJB9Iy8z9QCaCckTbzPw\u002fnCToQSPM\u002fGPPuwOd08z\u002foxHhJc3bzPzxgRmdPiPM\u002fW6nRkmSJ8z8r96avCIrzP5on3jtJnvM\u002fnDZNhoCf8z9RlWqXHa\u002fzP3K6t4VbvPM\u002fqwwkQRu98z+ydNrHyMHzPxXqKvb6x\u002fM\u002fJjxF1GXN8z9djyTWHM\u002fzPwRcNCqR0PM\u002fzsLnuUvT8z\u002f09jhXveHzP4QU4IEi4vM\u002fNPddbLXi8z+zD3c3R+TzP6OmbOT85fM\u002fs1wcU3\u002fm8z+YrwRSYufzP3bCUpdr9fM\u002fj2LR+K728z+BttRibPjzP6zzwEuZ+fM\u002fcW0SaiMK9D+7xGc+KQv0P5ew81+1DPQ\u002fkKm6aEQQ9D\u002f5qWsGGxv0P00oU1jrHPQ\u002fjUkCHmId9D81rBvvjiz0Py877HTWLfQ\u002f5EorlSIv9D9aezJ7sDf0P3z+9SOoPvQ\u002fysdYVGE\u002f9D\u002f3UHcSz1H0P6oD1MxBffQ\u002fCZh8\u002fVqY9D96J0MboZv0PyiNlkVZpvQ\u002fLH4HNwC49D\u002fUijQzK8L0P9bl5TQ0w\u002fQ\u002fDPW5HKfP9D+3hkAF8gL1P1Do47HRL\u002fU\u002fUcMIZQpL9T+3omBC3Gf1P8Q4no1kePU\u002fqhU5wKN49T\u002fc9xqC44L1Pwx4j1zMifU\u002fSuiovICb9T85X8GqOJ31P9TxTGAhoPU\u002fkzidZKur9T8mXFOD3a71P9iGFdEj5PU\u002fm34tdbHl9T+1vInGf+b1P3QOxj639vU\u002foPMQtm0C9j9u62wKXAX2P6eLCsXrNPY\u002fdTrAm4c29j+rYSl5EkT2P\u002f1j1RhbRfY\u002f0XZbdV9G9j\u002flS9AVW0f2P56ugSnaR\u002fY\u002fJ+P+4bZP9j9B5foM4lL2P9NbnpzbU\u002fY\u002fmHrbjqFa9j9aHieWpWf2P9I7oM\u002f0oPY\u002fTLRn4JGi9j8b5qhpOLH2P+r4b5hHsvY\u002fYFuxv+zO9j\u002fCToZXUND2P6pPHvVb1PY\u002fR6DgICnr9j\u002fTeZSEI\u002fz2P\u002f9q0xp7\u002ffY\u002fkO9I5bv+9j8va7M1Swf3P8eo9kyjB\u002fc\u002frmZR0NQI9z\u002f7leWQeQn3PwRC2WusCvc\u002f8u\u002fG\u002fokc9z9lJ6IdPx33P1MWYrucHvc\u002fQtx5qI4h9z+DPlYy+CL3P5ZnAguBOPc\u002fzgIVRJNK9z93FuWIa0v3P5MToQn7c\u002fc\u002fSl1BJlt19z\u002fhmudnbq73P6JlgTzc2vc\u002fXdlWNwft9z\u002fc6Fk5Sf33Pz4GdJEI\u002fvc\u002fzXDQuTb\u002f9z\u002fxw6MiiAL4P8a48XpyBfg\u002faDUSeJIq+D9dFfEINFn4P\u002fN2auwahvg\u002f93hJUoiW+D93rsSwgZz4P32NdfVTofg\u002fafSil82z+D8AcrAOsvL4P8xpd\u002f6j9fg\u002f5yBzyHr4+D\u002f7yWnTAR75P9dhpR9gH\u002fk\u002fPlnELIsk+T\u002fVo02bkij5P4hlQh9uT\u002fk\u002fMBq9fcpP+T+AHLOqLV75P1FyluUtX\u002fk\u002fHROKYxNv+T+BzlgsLHX5P03OkGQ1gfk\u002fylj4XYWC+T9OBwvEPoP5Pzkls\u002fZOl\u002fk\u002fN5trXvaX+T8ooaDznqP5P6oecJfcrPk\u002fg+l5eTLW+T\u002fWOC5fbgL6P7+sLQKEC\u002fo\u002fqH4fJ68S+j\u002fKN8lmeRT6PxqUifjaFfo\u002fUqB3GbQW+j+qaBZP2hf6PxFpU5adJfo\u002fDtUvptM5+j9oEl\u002fUiz36Pz3jhkJ4Qvo\u002fQYJc+2VU+j8kDODz5Fb6P7mYrrNjW\u002fo\u002fA\u002fcqCbte+j\u002fOe6sBjF\u002f6PxPnbGTLYPo\u002f\u002fGdwQr5n+j+1LvkCJ2n6P\u002fcDPZKab\u002fo\u002fP5CZ0bB0+j\u002fdz+UXb3X6Py52t\u002fzRgfo\u002fp06Rx\u002fyB+j9NhiOCUIL6P0TQx6W\u002fkfo\u002ftr2ARRuT+j8qR\u002feciZP6Py1wf4nTlPo\u002f7w0P5TSZ+j+25vcFDdD6Py05kUcN2fo\u002fwG8oW6gV+z8srMYS1hb7P1ePngnqJ\u002fs\u002fvlZZgFss+z\u002f6s\u002fyGqjT7P12ObimMQvs\u002fhNM+ZxxE+z+SFU3rX0f7Px\u002fytSV6gvs\u002fud6X6U2b+z81jT0gdaD7PzqWfbK9ofs\u002feGjaMNCm+z9qcQa5arL7PwQJqZm9tfs\u002fddBEltTC+z\u002ftlWbrx9P7P\u002fXr+Zrl4vs\u002fh+WLB6Xp+z9p2uwfdgz8PzwW+h79SPw\u002fhNCJkPxJ\u002fD+7IdUDKE78P1FZ4KeBgfw\u002fv41gX8KD\u002fD\u002fwveYsHoT8P1Q8qN0Snfw\u002fXqsz566f\u002fD8R9ak6FqH8P3cqSaZcpPw\u002fXmlZMTu\u002f\u002fD84y9dl+L\u002f8P9EAw9HZwvw\u002fRr6DwEbJ\u002fD\u002f45i1HXfX8P5eYXSDW9fw\u002ft+r+FDv4\u002fD+x5+XJmP\u002f8PxLcZ1N9AP0\u002fNPeOXC8E\u002fT9IzOLuQSL9P7VdE9IaI\u002f0\u002fQmChIMI5\u002fT\u002fiySq2k0L9P60b5Ym1Uv0\u002f\u002fGL+XeFV\u002fT8TpCfZqFb9P0h9gMVMWP0\u002fniSVSvRZ\u002fT9fX8A\u002fY179P0lzSv4vYP0\u002fEDVLG3Fl\u002fT8tkLcBRGb9P1Sf6zUcav0\u002faRI2VVpz\u002fT9SCSxGfnn9P4rhplAnev0\u002fcLh9Znt6\u002fT8FVyVwb4f9P4tUSAG7jf0\u002fRUqhA\u002f2b\u002fT+bKlln36n9P2KsTQjCqv0\u002f4mNU3xrU\u002fT\u002f3ymjD5eH9PwhVszmU4v0\u002fkLAC+H7l\u002fT9shQHP5ub9P\u002fP4SK2k8\u002f0\u002fk+c7ESf0\u002fT\u002f7xDGarvr9P5Ibt5if+\u002f0\u002fWI2P\u002fcn7\u002fT\u002fAcL35T\u002f\u002f9PxeNclkaAv4\u002f4JdsPNgC\u002fj92MsOpgwr+P5\u002fsbW3AC\u002f4\u002fUygzlMkP\u002fj+HGL4RHxD+P6urlYWGIP4\u002fJnZTiE8j\u002fj\u002fC0a7fnyT+P331rmreO\u002f4\u002f5XBh1Qc\u002f\u002fj+vSRkGZkT+P5DETsKWSP4\u002fNgwFKutw\u002fj9OdI2edJX+P5P1aAXhlf4\u002fUYaxv8ug\u002fj+Wnb8iIqn+PxztnvoPsv4\u002fMCL91We3\u002fj8u+CKxD7j+Px65RIGAvf4\u002fVPwHR3++\u002fj\u002fe2RS4Cuz+P7EOuRlu8P4\u002fjBJ\u002fd5\u002fx\u002fj86aI3mbRH\u002fP8r+42tsEv8\u002fd6cAWusS\u002fz8sL3yO2RP\u002fP3TuIitDFf8\u002fVjxvfFAk\u002fz+ZQGI\u002ftCT\u002fP17PiwvuJP8\u002f2yJo7TJj\u002fz+4LWb4DWv\u002fP8gYNm9Ba\u002f8\u002frU\u002flk5lr\u002fz+Hql1V7mz\u002fPxpuCSvbiP8\u002fqawIzH2R\u002fz\u002f7l+UE0Jz\u002fP53IiZ+Us\u002f8\u002fAbBaNsbA\u002fz8x3zuD6ej\u002fPy8iWI\u002faAABAPwDBoHUCAEDvbgEVTAQAQNxxkbVlBABAt9H3IvMLAECUjVlZTxsAQFNvygX8HABAwwDrBkQfAECrUQ6HITkAQJyTo0JtSgBA+Bqz06xPAEDWL3SZWFAAQJaS3GmEUQBAQ54jE2xjAEA2k8G0HGYAQOUSsrmLbABAfaZ2CuJxAEBSxr6F8XIAQAJ6GjBIegBATTihzuR8AEDeMyr06oEAQBJ\u002fyZ0EhABAqompumiMAEClOT6cuJsAQEobqtaAoABAJdh+U9SgAEDVmx+5FKMAQKXXdkW2pABAb9dbNZWmAEDPUyXje6sAQF1ZLl25rQBA4vfzlkC8AEB9kH0Uns0AQC4KaOBPzgBAOJvHYTDPAEC3JFnqzeYAQL5QdZ9O5wBAWTcPDpP0AEBV6MQ3dwgBQCmk+1oTCgFAPztTx64NAUDq6AoZPBoBQLAK\u002feEhKwFA0VQlHSctAUBMZx7IkzcBQLd40j4tOQFAI7o9lKpNAUDCpTkFO04BQDx2uyTvWAFA\u002fYbCZ+tgAUAfwghMbWIBQCToy38GYwFAp2HnXEB2AUDcx\u002fHgenYBQJM26RH+eAFAWX58tsyBAUCXCnyo4YEBQAXHlsxOggFAuiCEFeGFAUD3PPLm9IUBQNyUjuaGjgFArqEmXaePAUA5+yxk6I8BQMZ2KPFWoQFAJp8dkWuyAUBQ1ahNvbIBQArc0u6AuAFArVEGFtm5AUAZhxoi+s8BQNkYIfq95gFAeVS5eXjpAUDsHxL4oukBQNEHHdcz6gFA8ZAHx9HxAUBE6fKDRgICQNoUKxfoAgJAbaesx\u002fkSAkAlgv0Z1hMCQAVzBNtOFAJAwuEV8zkoAkBIoDwkYyoCQMDJkN+yLQJACUQtcvQtAkABPHAINDQCQPIMjQZ0RwJAfVksqBxRAkCF2S2Xx1kCQKYtlVT5cAJAgDKM3E91AkBGTRUIEn4CQBDOVEYrgAJA9GiAXvqPAkA5Xaot0JECQCKN2GErnAJASma7Yy2tAkAxaMZHMLICQO71csibtgJA6jLz7Au7AkBZJyUMHMMCQCINRKISxwJAYDJlErvHAkAiI0UJn+ICQKH43p2E8wJAlEHNFGMOA0A26oy14BEDQOVDmsKUEgNAy5cnQrATA0DiMLASHBQDQIdWzK21FANAuxJHP5YVA0DTatSFUBwDQLBGdqVlHANA0cbGkw8vA0AGsjJ1si8DQLsw+woMMANAQjtcgr4yA0CEwqi960ADQJIuNq0UUgNAcvdJIOtSA0CCI+QwVlMDQIGZUgvjVgNAXLFDJUNYA0Dcnd5aYF4DQDLir4f+YgNAFRpvyJJjA0CyEj06v3IDQK32PMH2cgNAgO303nNzA0An5fbkxHMDQES1oHv\u002fdANAbb34BWh5A0ALz5VS4XkDQIjgG7dWewNA0TQXbq97A0A="},"type":"scatter"},{"line":{"color":"#003366","dash":"dash","width":2},"mode":"lines","name":"2025 Projection","x":[66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303,304,305,306,307,308,309,310,311,312,313,314,315,316,317,318,319,320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365],"y":[2.4353932000000005,2.4722930969696977,2.5091929939393944,2.5460928909090916,2.5829927878787884,2.6198926848484856,2.6567925818181823,2.6936924787878795,2.7305923757575763,2.7674922727272735,2.8043921696969702,2.8412920666666674,2.878191963636364,2.9150918606060614,2.951991757575758,2.9888916545454554,3.025791551515152,3.0626914484848493,3.099591345454546,3.1364912424242433,3.17339113939394,3.210291036363637,3.247190933333334,3.284090830303031,3.3209907272727284,3.357890624242425,3.3947905212121223,3.431690418181819,3.4685903151515163,3.505490212121213,3.5423901090909102,3.579290006060607,3.616189903030304,3.653089800000001,3.689989696969698,3.726889593939395,3.763789490909092,3.800689387878789,3.837589284848486,3.8744891818181824,3.91138907878788,3.9482889757575763,3.985188872727274,4.02208876969697,4.058988666666668,4.095888563636365,4.132788460606061,4.169688357575758,4.206588254545456,4.243488151515153,4.280388048484849,4.317287945454547,4.354187842424244,4.3910877393939405,4.427987636363637,4.464887533333335,4.501787430303032,4.538687327272728,4.575587224242425,4.612487121212123,4.6493870181818195,4.686286915151516,4.723186812121213,4.760086709090911,4.7969866060606074,4.833886503030304,4.870786400000001,4.907686296969699,4.944586193939395,4.981486090909092,5.018385987878789,5.0552858848484865,5.092185781818183,5.12908567878788,5.165985575757577,5.202885472727274,5.239785369696971,5.276685266666668,5.313585163636365,5.350485060606062,5.387384957575759,5.424284854545456,5.461184751515153,5.49808464848485,5.534984545454547,5.571884442424244,5.6087843393939405,5.645684236363638,5.682584133333335,5.719484030303031,5.756383927272728,5.793283824242426,5.830183721212123,5.867083618181819,5.903983515151516,5.940883412121214,5.977783309090911,6.014683206060608,6.051583103030305,6.088483000000002,6.125382896969699,6.162282793939395,6.199182690909093,6.23608258787879,6.2729824848484865,6.309882381818183,6.346782278787881,6.383682175757578,6.420582072727274,6.457481969696971,6.494381866666669,6.531281763636366,6.568181660606062,6.605081557575759,6.641981454545457,6.6788813515151535,6.71578124848485,6.752681145454546,6.789581042424245,6.826480939393941,6.863380836363638,6.900280733333334,6.937180630303033,6.974080527272729,7.010980424242426,7.047880321212122,7.0847802181818205,7.121680115151517,7.158580012121214,7.195479909090912,7.232379806060608,7.269279703030305,7.306179600000002,7.3430794969696995,7.379979393939396,7.416879290909093,7.45377918787879,7.490679084848487,7.527578981818184,7.564478878787881,7.601378775757578,7.638278672727275,7.675178569696972,7.712078466666669,7.748978363636365,7.785878260606063,7.82277815757576,7.859678054545457,7.896577951515153,7.933477848484851,7.970377745454548,8.007277642424244,8.04417753939394,8.081077436363639,8.117977333333336,8.154877230303033,8.19177712727273,8.228677024242428,8.265576921212123,8.30247681818182,8.339376715151516,8.376276612121215,8.413176509090912,8.450076406060608,8.486976303030305,8.523876200000004,8.560776096969699,8.597675993939395,8.634575890909092,8.67147578787879,8.708375684848487,8.745275581818184,8.782175478787881,8.81907537575758,8.855975272727274,8.892875169696971,8.929775066666668,8.966674963636367,9.003574860606063,9.04047475757576,9.077374654545457,9.114274551515155,9.15117444848485,9.188074345454547,9.224974242424244,9.261874139393942,9.298774036363639,9.335673933333336,9.372573830303033,9.409473727272731,9.446373624242426,9.483273521212123,9.520173418181821,9.557073315151518,9.593973212121215,9.630873109090912,9.66777300606061,9.704672903030307,9.741572800000002,9.778472696969699,9.815372593939397,9.852272490909094,9.88917238787879,9.926072284848487,9.962972181818186,9.999872078787883,10.036771975757578,10.073671872727274,10.110571769696973,10.14747166666667,10.184371563636367,10.221271460606063,10.258171357575762,10.295071254545457,10.331971151515154,10.36887104848485,10.405770945454549,10.442670842424246,10.479570739393942,10.516470636363639,10.553370533333338,10.590270430303033,10.62717032727273,10.664070224242426,10.700970121212125,10.737870018181821,10.774769915151518,10.811669812121215,10.848569709090913,10.885469606060608,10.922369503030305,10.959269400000004,10.9961692969697,11.033069193939397,11.069969090909094,11.106868987878793,11.14376888484849,11.180668781818184,11.217568678787881,11.25446857575758,11.291368472727276,11.328268369696973,11.36516826666667,11.402068163636368,11.438968060606065,11.47586795757576,11.512767854545457,11.549667751515155,11.586567648484852,11.623467545454549,11.660367442424246,11.697267339393944,11.734167236363641,11.771067133333336,11.807967030303033,11.844866927272731,11.881766824242428,11.918666721212125,11.955566618181823,11.99246651515152,12.029366412121217,12.066266309090912,12.10316620606061,12.140066103030307,12.176966000000004,12.2138658969697,12.250765793939399,12.287665690909096,12.32456558787879,12.361465484848488,12.398365381818186,12.435265278787883,12.47216517575758,12.509065072727276,12.545964969696975,12.582864866666672,12.619764763636367,12.656664660606063,12.693564557575762,12.730464454545459,12.767364351515155,12.804264248484852,12.84116414545455,12.878064042424247,12.914963939393942,12.95186383636364,12.988763733333338,13.025663630303034,13.062563527272731,13.099463424242428,13.136363321212126,13.173263218181823,13.210163115151518,13.247063012121215,13.283962909090913,13.32086280606061,13.357762703030307,13.394662600000004,13.431562496969702,13.468462393939399],"type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"font":{"family":"Arial, sans-serif","size":11,"color":"#333333"},"title":{"text":"YTD Cumulative Revenue: 2024 vs 2025","font":{"family":"Georgia, serif","size":14,"color":"#333333"}},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"margin":{"l":50,"r":20,"t":60,"b":50},"xaxis":{"title":{"text":"Day of Year"},"showgrid":false,"showline":true,"linewidth":1,"linecolor":"#CCCCCC"},"yaxis":{"title":{"text":"Cumulative Revenue ($M)"},"showgrid":true,"gridwidth":1,"gridcolor":"#EEEEEE","showline":true,"linewidth":1,"linecolor":"#CCCCCC"},"height":350,"plot_bgcolor":"white","paper_bgcolor":"white","showlegend":true},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+</body>
+</html>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Regional Performance</div>
+        
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Region</th>
+                <th class="number">YTD Sales</th>
+                <th class="number">Target</th>
+                <th class="number">% of Target</th>
+                <th class="number">Growth vs LY</th>
+                <th class="number">Forecast</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        <tr>
+            <td>West</td>
+            <td class="number">$596K</td>
+            <td class="number">$32.0M</td>
+            <td class="number">2%</td>
+            <td class="number"><span class="positive">↑ 10%</span></td>
+            <td class="number">$3.3M</td>
+        </tr>
+        
+        <tr>
+            <td>Central</td>
+            <td class="number">$576K</td>
+            <td class="number">$32.0M</td>
+            <td class="number">2%</td>
+            <td class="number"><span class="positive">↑ 19%</span></td>
+            <td class="number">$3.2M</td>
+        </tr>
+        
+        <tr>
+            <td>South</td>
+            <td class="number">$438K</td>
+            <td class="number">$32.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="negative">↓ 20%</span></td>
+            <td class="number">$2.4M</td>
+        </tr>
+        
+        <tr>
+            <td>North</td>
+            <td class="number">$421K</td>
+            <td class="number">$32.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="negative">↓ 13%</span></td>
+            <td class="number">$2.3M</td>
+        </tr>
+        
+        <tr>
+            <td>East</td>
+            <td class="number">$405K</td>
+            <td class="number">$32.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="negative">↓ 17%</span></td>
+            <td class="number">$2.2M</td>
+        </tr>
+        
+        </tbody>
+    </table>
+    
+    </div>
+
+    <div class="section">
+        <div class="section-title">Sales Team Leaderboard</div>
+        
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th class="number">Rank</th>
+                <th>Sales Person</th>
+                <th class="number">YTD Sales</th>
+                <th class="number">Target</th>
+                <th class="number">% of Target</th>
+                <th class="number">Growth</th>
+                <th class="number">Forecast</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        <tr class="">
+            <td class="number">1</td>
+            <td>Ivy Anderson</td>
+            <td class="number">$309K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">2%</td>
+            <td class="number"><span class="positive">↑ 27%</span></td>
+            <td class="number">$1.7M</td>
+        </tr>
+        
+        <tr class="alt-row">
+            <td class="number">2</td>
+            <td>Carol Martinez</td>
+            <td class="number">$294K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">2%</td>
+            <td class="number"><span class="positive">↑ 32%</span></td>
+            <td class="number">$1.6M</td>
+        </tr>
+        
+        <tr class="">
+            <td class="number">3</td>
+            <td>Henry Taylor</td>
+            <td class="number">$280K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">2%</td>
+            <td class="number"><span class="negative">↓ 9%</span></td>
+            <td class="number">$1.5M</td>
+        </tr>
+        
+        <tr class="alt-row">
+            <td class="number">4</td>
+            <td>Emma Wilson</td>
+            <td class="number">$262K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">2%</td>
+            <td class="number"><span class="positive">↑ 3%</span></td>
+            <td class="number">$1.5M</td>
+        </tr>
+        
+        <tr class="">
+            <td class="number">5</td>
+            <td>Jack Robinson</td>
+            <td class="number">$258K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">2%</td>
+            <td class="number"><span class="negative">↓ 10%</span></td>
+            <td class="number">$1.4M</td>
+        </tr>
+        
+        <tr class="alt-row">
+            <td class="number">6</td>
+            <td>Frank Brown</td>
+            <td class="number">$239K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="negative">↓ 3%</span></td>
+            <td class="number">$1.3M</td>
+        </tr>
+        
+        <tr class="">
+            <td class="number">7</td>
+            <td>Grace Lee</td>
+            <td class="number">$232K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="positive">↑ 3%</span></td>
+            <td class="number">$1.3M</td>
+        </tr>
+        
+        <tr class="alt-row">
+            <td class="number">8</td>
+            <td>Bob Smith</td>
+            <td class="number">$231K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="negative">↓ 21%</span></td>
+            <td class="number">$1.3M</td>
+        </tr>
+        
+        <tr class="">
+            <td class="number">9</td>
+            <td>Alice Johnson</td>
+            <td class="number">$228K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="negative">↓ 6%</span></td>
+            <td class="number">$1.3M</td>
+        </tr>
+        
+        <tr class="alt-row">
+            <td class="number">10</td>
+            <td>David Chen</td>
+            <td class="number">$101K</td>
+            <td class="number">$16.0M</td>
+            <td class="number">1%</td>
+            <td class="number"><span class="negative">↓ 53%</span></td>
+            <td class="number">$561K</td>
+        </tr>
+        
+        </tbody>
+    </table>
+    
+    </div>
+
+    <div class="section">
+        <div class="section-title">Forecast & Insights</div>
+        <div class="insight-box">
+            <h3>Based on current YTD performance and historical trends:</h3>
+            <ul>
+                <li>Projected Full Year Revenue: $13.5M (↓ 4% vs 2024)</li>
+                <li>Probability of Hitting $160.0M Target: 8%</li>
+                <li>Gap to Close: $146.5M ($490K per day)</li>
+                <li>Recommendation: Focus on high-growth regions and accelerate Q4 sales initiatives</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 60px; padding-top: 20px; border-top: 1px solid #CCCCCC; font-size: 11px; color: #444444;">
+        Sales Analytics Dashboard | Robin Phonpakdee - Data Analyst | 2026
+    </div>
+</body>
+</html>
